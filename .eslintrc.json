@@ -1,0 +1,9 @@
+{
+	"env": {
+		"node": true
+	},
+	"globals": {
+		"logger": true
+	},
+	"extends": "eslint-config-lludol"
+}

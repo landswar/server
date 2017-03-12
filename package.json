@@ -1,0 +1,55 @@
+{
+  "name": "landswar-server",
+  "version": "0.0.1",
+  "description": "The LandsWar server which contains the API and the WebSocket server.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start-docker": "docker-compose up",
+    "stop-docker": "docker-compose stop",
+    "debug": "nodemon --debug=0.0.0.0:5858 index.js",
+    "lint": "eslint .",
+    "fix-code": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/landswar/server.git"
+  },
+  "keywords": [
+    "landswar",
+    "server",
+    "landswar-server"
+  ],
+  "author": "Ludovic Lerus <lerus@ludovic.ninja> (https://ludovic.ninja)",
+  "license": "\tAGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/landswar/server/issues"
+  },
+  "homepage": "https://github.com/landswar/server#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "bookshelf": "^0.10.3",
+    "boom": "^4.2.0",
+    "camelcase-keys": "^4.0.0",
+    "glue": "^4.1.0",
+    "hapi": "^16.1.0",
+    "hapi-good-winston": "^1.1.1",
+    "hapi-ioredis": "^2.3.0",
+    "hapio": "^1.4.0",
+    "joi": "^10.2.2",
+    "jsonwebtoken": "^7.3.0",
+    "knex": "^0.12.7",
+    "mysql": "^2.13.0",
+    "shortid": "^2.2.8",
+    "socket.io": "^1.7.3",
+    "socket.io-as-promised": "^1.0.0",
+    "winston-lludol": "0.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-lludol": "^0.1.6"
+  },
+  "engines": {
+      "node" : ">=7.0"
+    }
+}

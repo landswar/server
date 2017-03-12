@@ -1,0 +1,41 @@
+version: "3"
+services:
+  percona:
+    build: ./docker/percona-db/.
+    container_name: landswar-percona
+    environment:
+      MYSQL_ROOT_PASSWORD: landswar
+      MYSQL_DATABASE: landswar
+      MYSQL_USER: landswar
+      MYSQL_PASSWORD: landswar
+    ports:
+      - "3306:3306"
+    volumes:
+      - landswar_percona_db:/var/lib/mysql
+
+  redis:
+    image: redis
+    container_name: landswar-redis
+    ports:
+        - "6379:6379"
+    volumes:
+      - landswar_redis_db:/var/lib/redis
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: landswar-pma
+    environment:
+     - PMA_ARBITRARY=1
+     - PMA_USER=root
+     - PMA_PASSWORD=landswar
+    links:
+      - percona:db
+    ports:
+     - 8080:80
+    volumes:
+     - /sessions
+
+volumes:
+  landswar_percona_db:
+  landswar_redis_db:
+  

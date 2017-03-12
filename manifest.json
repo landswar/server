@@ -1,0 +1,45 @@
+{
+	"connections": [
+		{
+			"port": 3000,
+			"host": "127.0.0.1",
+			"labels": ["api"]
+		},
+		{
+			"port": 3001,
+			"host": "127.0.0.1",
+			"labels": ["websocket"]
+		}
+	],
+	"registrations": [
+		{
+			"plugin": {
+				"register": "hapi-ioredis",
+				"options": {
+					"port": "6379",
+					"url": "127.0.0.1",
+					"enableReadyCheck": true,
+					"enableOfflineQueue": false,
+					"showFriendlyErrorStack": true,
+					"db": 0
+				}
+			}
+		},
+		{
+			"plugin": {
+				"register": "hapio",
+				"options": {
+					"connectionLabel": "websocket"
+				}
+			}
+		},
+		{ "plugin": "./src/utils/index" },
+		{ "plugin": "./src/websockets/models/index" },
+		{ "plugin": "./src/routes/ground/index", "options": { "select": "api" } },
+		{ "plugin": "./src/routes/ground_penalty/index", "options": { "select": "api" } },
+		{ "plugin": "./src/routes/room/index", "options": { "select": "api" } },
+		{ "plugin": "./src/routes/player/index", "options": { "select": "api" } },
+		{ "plugin": "./src/routes/unit/index", "options": { "select": "api" } },
+		{ "plugin": "./src/websockets/room/index", "options": { "select": "websocket" } }
+	]
+}

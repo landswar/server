@@ -1,2 +1,56 @@
-# server
+# LandsWar - Server
+
+[![dependency status](https://david-dm.org/landswar/server.svg)](https://david-dm.org/landswar/server)
+[![dev-dependencies status](https://david-dm.org/landswar/server/dev-status.svg)](https://david-dm.org/landswar/server#info=devDependencies)
+
 The LandsWar server which contains the API and the WebSocket server.
+
+## What is LandsWar?
+
+LandsWar is a turn-based tactics online video game inspired by Advance Wars.
+
+There are 3 types of units in the game (we don't have define the number of units in each category):
+
+- ground units
+- air units
+- naval units
+
+Also, there are a lot of different type of ground with bonus or malus for units.
+
+With LandsWar, you will be able to play against your friend and people from all around the world.
+
+## How to play?
+
+Coming soon...
+
+## How to run locally?
+
+I use async/await so you need node.js v7 minimum to run it with the harmony flag: ```--harmony-async-await```.
+Since the v7.6.0, async/await have been ported so you don't need to use the flag.
+
+You need first to install ```docker-compose``` to start databases (Percona and Redis).
+
+Then, you can run these commands:
+```
+npm run start-docker
+npm start
+```
+
+If you have Postman installed, you can get and test all available routes with Postman:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/cb70cbff411577e38581)
+
+### NPM commands
+
+- ```npm run stop-docker``` To stop docker instances.
+- ```npm run debug``` To start the app with the debugger on port 5858.
+- ```npm run lint``` To run the ESLint code check.
+- ```npm run fix-code``` To fix simple norm errors with ESLint.
+
+## Questions / Bugs
+
+If you find a bug or want a new feature, don't hesitate to [create an issue](https://github.com/landswar/server/issues).
+
+## License
+
+[GNU AFFERO GENERAL PUBLIC LICENSE](LICENSE)
