@@ -1,6 +1,20 @@
 const Boom = require('boom');
 const Player = require('./../models/player');
 
+/* eslint-disable valid-jsdoc */
+
+/**
+ * @api {post} /player Create a Player.
+ * @apiName postPlayer
+ * @apiGroup Player
+ *
+ * @apiParam {String} nickname The nickname of the Player.
+ *
+ * @apiSuccess (200) {String} nickname The nickname of the Player.
+ * @apiSuccess (200) {String} token The jsonwebtoken of the Player.
+ *
+ * @apiError (400) PlayerBadRequest The nickname already exists.
+ */
 exports.createPlayer = async function (request, reply) {
 	try {
 		const player = await Player.get({
@@ -8,7 +22,8 @@ exports.createPlayer = async function (request, reply) {
 		});
 
 		if (player) {
-			Boom.badRequest('Name already taken');
+			reply(Boom.badRequest('Nickname already exists'));
+			return;
 		}
 
 		const newPlayer = await Player.create({
@@ -21,6 +36,6 @@ exports.createPlayer = async function (request, reply) {
 		reply(newPlayer);
 	} catch (error) {
 		logger.error(error);
-		reply(error);
+		reply(Boom.badImplementation());
 	}
 };
