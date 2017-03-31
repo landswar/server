@@ -47,6 +47,10 @@ If you have Postman installed, you can get and test all available routes with Po
 - ```npm run lint``` To run the ESLint code check.
 - ```npm run fix-code``` To fix simple norm errors with ESLint.
 
+### Documentation
+
+The API documentation is available here: [https://landswar.github.io/server/](https://landswar.github.io/server/)
+
 ## Questions / Bugs
 
 If you find a bug or want a new feature, don't hesitate to [create an issue](https://github.com/landswar/server/issues).
