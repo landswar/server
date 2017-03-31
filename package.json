@@ -9,7 +9,8 @@
     "stop-docker": "docker-compose stop",
     "debug": "nodemon --debug=0.0.0.0:5858 index.js",
     "lint": "eslint .",
-    "fix-code": "eslint . --fix"
+    "fix-code": "eslint . --fix",
+    "generate-docs": "apidoc -i src/routes/ -o docs/"
   },
   "repository": {
     "type": "git",
@@ -46,10 +47,11 @@
     "winston-lludol": "0.0.5"
   },
   "devDependencies": {
+    "apidoc": "^0.17.5",
     "eslint": "^3.17.1",
     "eslint-config-lludol": "^0.1.6"
   },
   "engines": {
-      "node" : ">=7.0"
-    }
+    "node": ">=7.0"
+  }
 }
