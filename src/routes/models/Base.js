@@ -51,7 +51,14 @@ class Base {
 			if (!result) {
 				return null;
 			}
-			return camelcaseKeys(result.toJSON());
+			const resultJson = result.toJSON();
+			if (Array.isArray(resultJson)) {
+				resultJson.forEach((value, index, array) => {
+					array[index] = camelcaseKeys(value);
+				});
+				return resultJson;
+			}
+			return camelcaseKeys(resultJson);
 		});
 	}
 }
