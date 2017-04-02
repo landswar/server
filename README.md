@@ -32,6 +32,7 @@ You need first to install ```docker-compose``` to start databases (Percona and R
 
 Then, you can run these commands:
 ```
+npm install
 npm run start-docker
 npm start
 ```
