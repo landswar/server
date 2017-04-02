@@ -1,3 +1,4 @@
+const corsHeaders = require('hapi-cors-headers');
 const Glue = require('glue');
 const good = require('good');
 const logger = require('winston-lludol');
@@ -12,6 +13,7 @@ global.logger = logger;
 const options = {
 	relativeTo: __dirname,
 };
+
 
 Glue.compose(manifest, options).then((server) =>
 	Promise.all([
@@ -38,6 +40,8 @@ Glue.compose(manifest, options).then((server) =>
 	])
 ).then(([server]) => {
 	server.method('getMap', () => JSON.stringify(map));
+
+	server.ext('onPreResponse', corsHeaders);
 
 	server.start(() => {
 		logger.info(`API listening at ${server.connections[0].info.uri}`);
