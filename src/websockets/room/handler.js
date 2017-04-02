@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const RoomService = require('./service');
 
 let server = null;
@@ -17,7 +18,7 @@ exports.join = async function (data, callback) {
 		const room = await redisMethods.room.get(values.shortIdRoom);
 
 		if (!room) {
-			throw new server.methods.error.Custom('Room not found');
+			return callback(Boom.notFound('Room not found').output.payload);
 		}
 
 		const isPlayerInRoom = await redisMethods.player.exists(values.shortIdRoom, decoded.id);
