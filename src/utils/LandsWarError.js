@@ -1,3 +1,5 @@
+const Boom = require('boom');
+
 /**
  * Handle Error.
  */
@@ -21,10 +23,10 @@ class LandsWarError extends Error {
 function handleSocketError(error, callback) {
 	if ((error.name === undefined || error.name === 'ValidationError' || error.name === 'LandsWarError') && error.message) {
 		logger.error(error.message);
-		callback({ message: error.message });
+		callback(Boom.badRequest(error.message));
 	} else {
 		logger.error(error);
-		callback({ message: 'An unknown error happened' });
+		callback(Boom.badImplementation());
 	}
 }
 
