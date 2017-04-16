@@ -1,6 +1,7 @@
 const jwt = Promise.promisifyAll(require('jsonwebtoken'));
+const crypto = require('crypto');
 
-const JWT_SECRET = 'landswar - topsecret';
+const SECRET_KEY = process.env.SECRET_KEY;
 
 /**
  * The library of LandsWar
@@ -16,6 +17,15 @@ class LandsWarLib {
 	}
 
 	/**
+	 * Crypte the given text.
+	 * @param  {Number} text - text to crypte.
+	 * @return {String} text crypted.
+	 */
+	static crypt(text) {
+		return crypto.createHmac('sha512', SECRET_KEY).update(text).digest('hex');
+	}
+
+	/**
 	 * Create a new token.
 	 * @param  {Number} idUser - The id of the player.
 	 * @param  {String} nickname - The nickname of the player.
@@ -25,7 +35,7 @@ class LandsWarLib {
 		return jwt.signAsync({
 			id: idUser,
 			nickname,
-		}, JWT_SECRET, {
+		}, SECRET_KEY, {
 			expiresIn:   '30 days',
 			noTimestamp: true,
 		})
@@ -39,7 +49,7 @@ class LandsWarLib {
 	 * @return {Promise} A Promise with the decoded value.
 	 */
 	static verifyJwt(token) {
-		return jwt.verifyAsync(token, JWT_SECRET)
+		return jwt.verifyAsync(token, SECRET_KEY)
 		.then((decoded) => decoded)
 		.catch(() => 'Token expired!');
 	}

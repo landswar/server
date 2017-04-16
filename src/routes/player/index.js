@@ -10,9 +10,15 @@ const routes = [
 			validate: {
 				payload: {
 					nickname: Joi.string().min(3),
+					password: Joi.string().min(3),
 				},
 			},
 		},
+	},
+	{
+		method:  'POST',
+		path:    '/login',
+		handler: handler.login,
 	},
 ];
 

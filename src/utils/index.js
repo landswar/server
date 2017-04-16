@@ -14,6 +14,8 @@ exports.register = function (server, options, next) {
 	server.method('lib.verifyJwt', LandsWarLib.verifyJwt);
 	server.method('lib.shuffleArray', LandsWarLib.shuffleArray);
 
+	server.method('lib.crypt', LandsWarLib.crypt);
+
 	next();
 };
 
