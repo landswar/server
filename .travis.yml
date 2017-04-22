@@ -12,6 +12,16 @@ before_install:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh'
+    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh production'
     on:
       branch: master
+  - provider: script
+    skip_cleanup: true
+    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh beta'
+    on:
+      branch: beta
+  - provider: script
+    skip_cleanup: true
+    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh development'
+    on:
+      branch: dev
