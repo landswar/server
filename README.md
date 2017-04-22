@@ -32,9 +32,9 @@ You need first to install ```docker-compose``` to start databases (Percona and R
 
 Then, you can run these commands:
 ```
-npm install
-npm run start-docker
-npm start
+yarn
+yarn run start-docker
+yarn start
 ```
 
 If you have Postman installed, you can get and test all available routes with Postman:
@@ -43,10 +43,10 @@ If you have Postman installed, you can get and test all available routes with Po
 
 ### NPM commands
 
-- ```npm run stop-docker``` To stop docker instances.
-- ```npm run debug``` To start the app with the debugger on port 5858.
-- ```npm run lint``` To run the ESLint code check.
-- ```npm run fix-code``` To fix simple norm errors with ESLint.
+- ```yarn run stop-docker``` To stop docker instances.
+- ```yarn run debug``` To start the app with the debugger on port 5858.
+- ```yarn run lint``` To run the ESLint code check.
+- ```yarn run fix-code``` To fix simple norm errors with ESLint.
 
 ### Documentation
 
