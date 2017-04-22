@@ -13,6 +13,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - rsync -r --delete-after --quiet --rsh="ssh -p$SSH_PORT -o StrictHostKeyChecking=no" $TRAVIS_BUILD_DIR travis@landswar.com:afterbuild
-    on:
-      branch: master
+      - ssh travis@landswar.com -p$SSH_PORT -o StrictHostKeyChecking=no
+      - cd /home/http/data/beta/apibeta.landswar.com
+      - git pull
+      - yarn
