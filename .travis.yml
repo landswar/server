@@ -4,7 +4,7 @@ node_js:
 - 7.9.0
 
 addons:
-  ssh_known_hosts: landswar.com:$SSH_PORT
+  ssh_known_hosts: landswar.com
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_263db915efba_key -iv $encrypted_263db915efba_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
@@ -15,6 +15,6 @@ before_install:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rsync -r --delete-after --quiet ./beforebuild travis@landswar.com:afterbuild
+    script: rsync -r --delete-after --quiet "ssh -p $SSH_PORT" ./beforebuild travis@landswar.com:afterbuild
     on:
       branch: master
