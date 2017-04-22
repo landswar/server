@@ -2,6 +2,7 @@
 
 [![dependency status](https://david-dm.org/landswar/server.svg)](https://david-dm.org/landswar/server)
 [![dev-dependencies status](https://david-dm.org/landswar/server/dev-status.svg)](https://david-dm.org/landswar/server#info=devDependencies)
+[![Build Status](https://travis-ci.org/landswar/server.svg?branch=master)](https://travis-ci.org/landswar/server)
 
 The LandsWar server which contains the API and the WebSocket server.
 
