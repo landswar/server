@@ -4,7 +4,7 @@ node_js:
 - 7.9.0
 
 addons:
-  ssh_known_hosts: landswar.com
+  ssh_known_hosts: landswar.com:$SSH_PORT
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_263db915efba_key -iv $encrypted_263db915efba_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
