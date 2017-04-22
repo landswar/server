@@ -4,7 +4,7 @@
   "description": "The LandsWar server which contains the API and the WebSocket server.",
   "main": "index.js",
   "scripts": {
-    "start": "SECRET_KEY=landswartopsecret node index.js",
+    "start": "node index.js",
     "start-docker": "docker-compose up",
     "stop-docker": "docker-compose stop",
     "debug": "nodemon --debug=0.0.0.0:5858 index.js",
