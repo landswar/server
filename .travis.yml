@@ -12,6 +12,6 @@ before_install:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: scripts/deploy.sh
+    script: ssh travis@landswar.com -p $SSH_PORT '~/deploy.sh'
     on:
       branch: master
