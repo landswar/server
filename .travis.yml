@@ -15,6 +15,6 @@ before_install:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rsync -r --delete-after --quiet "ssh -p $SSH_PORT" ./beforebuild travis@landswar.com:afterbuild
+    script: rsync -r --delete-after --quiet --rsh="ssh -p$SSH_PORT" ./beforebuild travis@landswar.com:afterbuild
     on:
       branch: master
