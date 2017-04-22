@@ -12,6 +12,7 @@ before_install:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rsync -r --delete-after --quiet --rsh="ssh -p$SSH_PORT -o StrictHostKeyChecking=no" ./beforebuild travis@landswar.com:afterbuild
+    script:
+      - rsync -r --delete-after --quiet --rsh="ssh -p$SSH_PORT -o StrictHostKeyChecking=no" $TRAVIS_BUILD_DIR travis@landswar.com:afterbuild
     on:
       branch: master
