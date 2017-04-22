@@ -1,12 +1,10 @@
 {
 	"connections": [
 		{
-			"port": 3000,
 			"host": "127.0.0.1",
 			"labels": ["api"]
 		},
 		{
-			"port": 3001,
 			"host": "127.0.0.1",
 			"labels": ["websocket"]
 		}
