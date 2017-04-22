@@ -1,7 +1,7 @@
 const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 const crypto = require('crypto');
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY || 'landswartopsecret';
 
 /**
  * The library of LandsWar
