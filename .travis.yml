@@ -12,8 +12,6 @@ before_install:
 deploy:
   - provider: script
     skip_cleanup: true
-    script:
-      - ssh travis@landswar.com -p$SSH_PORT -o StrictHostKeyChecking=no
-      - cd /home/http/data/beta/apibeta.landswar.com
-      - git pull
-      - yarn
+    script: scripts/deploy.sh
+    on:
+      branch: master
