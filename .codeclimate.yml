@@ -1,7 +1,5 @@
 ---
 engines:
-  csslint:
-    enabled: true
   duplication:
     enabled: true
     config:
@@ -10,6 +8,8 @@ engines:
   eslint:
     enabled: true
   fixme:
+    enabled: true
+  nodesecurity:
     enabled: true
 ratings:
   paths:
