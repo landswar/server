@@ -5,6 +5,9 @@
 	"globals": {
 		"logger": true
 	},
+	"parserOptions": {
+		"ecmaVersion": 8
+	},
 	"extends": "eslint-config-lludol",
 	"rules": {
 		"comma-dangle": ["error", {
