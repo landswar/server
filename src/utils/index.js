@@ -16,6 +16,7 @@ exports.register = function (server, options, next) {
 
 	server.method('lib.crypt', LandsWarLib.crypt);
 
+//	server.auth.strategy('simple', 'basic', { validateFunc: validateToken });
 	next();
 };
 

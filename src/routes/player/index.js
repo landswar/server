@@ -9,6 +9,7 @@ const routes = [
 		config:  {
 			validate: {
 				payload: {
+					email:    Joi.string().email(),
 					nickname: Joi.string().min(3),
 					password: Joi.string().min(3),
 				},
@@ -16,9 +17,14 @@ const routes = [
 		},
 	},
 	{
-		method:  'POST',
-		path:    '/login',
-		handler: handler.login,
+		method:  'GET',
+		path:    '/players',
+		handler: handler.getPlayers,
+	},
+	{
+		method:  'GET',
+		path:    '/players/{id}',
+		handler: handler.getPlayer,
 	},
 ];
 

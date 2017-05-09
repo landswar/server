@@ -78,6 +78,7 @@ INSERT INTO `ground_penalties` (`id`, `id_ground`, `id_unit`, `penalty`) VALUES
 CREATE TABLE `players` (
   `id` int(11) NOT NULL,
   `nickname` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

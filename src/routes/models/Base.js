@@ -23,22 +23,24 @@ class Base {
 
 	/**
 	 * Return every element of associated with the Model.
+	 * @param {Array} columns Array of columns names to get.
 	 * @return {Promise} A Promise with every element.
 	 */
-	getAll() {
-		return this._toJSON(this._Model.fetchAll());
+	getAll(columns) {
+		return this._toJSON(this._Model.fetchAll({ columns }));
 	}
 
 	/**
 	 * Select an element where Attributes equals.
 	 * @param {Object} idOrAttrs - A number for an ID and an Object for different attributes.
+	 * @param {Array} columns Array of columns names to get.
 	 * @return {Promise} A Promise with the element found.
 	 */
-	get(idOrAttrs) {
+	get(idOrAttrs, columns) {
 		if (typeof idOrAttrs === 'number') {
-			return this._toJSON(this._Model.where('id', idOrAttrs).fetch());
+			return this._toJSON(this._Model.where('id', idOrAttrs).fetch(columns));
 		}
-		return this._toJSON(this._Model.where(idOrAttrs).fetch());
+		return this._toJSON(this._Model.where(idOrAttrs).fetch(columns));
 	}
 
 	/**
