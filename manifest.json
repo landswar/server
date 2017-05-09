@@ -37,6 +37,7 @@
 		{ "plugin": "./src/routes/ground_penalty/index", "options": { "select": "api" } },
 		{ "plugin": "./src/routes/room/index", "options": { "select": "api" } },
 		{ "plugin": "./src/routes/player/index", "options": { "select": "api" } },
+		{ "plugin": "./src/routes/auth/index", "options": { "select": "api" } },
 		{ "plugin": "./src/routes/unit/index", "options": { "select": "api" } },
 		{ "plugin": "./src/websockets/room/index", "options": { "select": "websocket" } }
 	]
