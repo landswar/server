@@ -1,12 +1,12 @@
 const Boom = require('boom');
-const Player = require('./../models/player');
+const Player = require('./../../models/player');
 
 /* eslint-disable valid-jsdoc */
 
 /**
  * @api {post} /login Login user.
  * @apiName loginPlayer
- * @apiGroup Player
+ * @apiGroup Auth
  *
  * @apiParam {String} id The nickname or email of the player.
  *
@@ -35,6 +35,44 @@ exports.login = async function (request, reply) {
 			request.server.methods.lib.createToken(player.id, player.nickname);
 
 		player.password = undefined;
+		reply(player);
+	} catch (error) {
+		logger.debug('CATCH');
+		logger.error(error);
+		reply(Boom.badImplementation());
+	}
+};
+
+/**
+ * @api {post} /checkToken Check Token validity.
+ * @apiName checkToken
+ * @apiGroup Auth
+ *
+ * @apiParam {String} token The token to check.
+ *
+ * @apiSuccess (200) {String} email The nickname of the Player.
+ * @apiSuccess (200) {String} nickname The nickname of the Player.
+ *
+ * @apiError (400) TokenNotValid The token is not valid.
+ * @apiError (404) UserNotFound The user corresponding to the given token cannot be found.
+ */
+exports.checkToken = async function (request, reply) {
+	try {
+		const token = await
+			request.server.methods.lib.verifyJwt(request.payload.token);
+
+		console.log(token);
+		if (!token) {
+			reply(Boom.badRequest('Invalid Token'));
+			return;
+		}
+
+		const player = await Player.get({id: token.id}, ['id', 'nickname', 'email']);
+		if (!player) {
+			reply(Boom.notFound());
+			return;
+		}
+
 		reply(player);
 	} catch (error) {
 		logger.debug('CATCH');

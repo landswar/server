@@ -1,4 +1,5 @@
 const corsHeaders = require('hapi-cors-headers');
+const jwtAuth = require('hapi-auth-jwt');
 const Glue = require('glue');
 const good = require('good');
 const logger = require('winston-lludol');
@@ -44,6 +45,7 @@ Glue.compose(manifest, options).then((server) =>
 			},
 		}),
 	])
+
 ).then(([server]) => {
 	server.method('getMap', () => JSON.stringify(map));
 
