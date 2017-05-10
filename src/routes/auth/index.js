@@ -7,10 +7,24 @@ const routes = [
 		path:    '/login',
 		handler: handler.login,
 		config:  {
+			auth: false,
 			validate: {
 				payload: {
 					id:       Joi.string().min(1),
 					password: Joi.string().min(1),
+				},
+			},
+		},
+	},
+	{
+		method:  'POST',
+		path:    '/checkToken',
+		handler: handler.checkToken,
+		config:  {
+			auth: false,
+			validate: {
+				payload: {
+					token:       Joi.string().min(10),
 				},
 			},
 		},

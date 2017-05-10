@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const Ground = require('./../models/ground');
+const Ground = require('./../../models/ground');
 
 /* eslint-disable valid-jsdoc */
 

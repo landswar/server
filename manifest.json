@@ -33,6 +33,11 @@
 				}
 			}
 		},
+		{
+			"plugin": {
+				"register": "hapi-auth-jwt"
+			}
+		},
 		{ "plugin": "./src/utils/index" },
 		{ "plugin": "./src/websockets/models/index" },
 		{ "plugin": "./src/routes/ground/index", "options": { "select": "api" } },

@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const GroundPenalty = require('./../models/ground_penalty');
+const GroundPenalty = require('./../../models/ground_penalty');
 
 /* eslint-disable valid-jsdoc */
 

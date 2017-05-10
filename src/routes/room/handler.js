@@ -1,7 +1,7 @@
 const Boom = require('boom');
 const shortid = require('shortid');
 
-const Room = require('./../models/room');
+const Room = require('./../../models/room');
 
 /* eslint-disable valid-jsdoc */
 

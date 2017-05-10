@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const Player = require('./../models/player');
+const Player = require('./../../models/player');
 
 /* eslint-disable valid-jsdoc */
 
@@ -35,7 +35,7 @@ exports.getPlayers = async function (request, reply) {
  * @apiSuccess (200) {String} email Email of the player.
  * @apiSuccess (200) {String} nickname Nickname of the player.
  *
- * @apiError (404) PlayerNotFound The id of the Room was not found.
+ * @apiError (404) PlayerNotFound The id of the Player was not found.
  */
 exports.getPlayer = async function (request, reply) {
 	try {
@@ -87,6 +87,69 @@ exports.createPlayer = async function (request, reply) {
 
 		newPlayer.password = undefined;
 		reply(newPlayer);
+	} catch (error) {
+		logger.error(error);
+		reply(Boom.badImplementation());
+	}
+};
+
+/**
+ * @api {put} /player/:id Update a Player.
+ * @apiName putPlayer
+ * @apiGroup Player
+ *
+ * @apiParam {Number} id Player unique ID.
+ * @apiParam {String} nickname The nickname of the Player.
+ * @apiParam {String} email The email of the Player.
+ *
+ * @apiSuccess (200) {Number} id Player unique ID.
+ * @apiSuccess (200) {String} nickname The nickname of the Player.
+ * @apiSuccess (200) {String} email The email of the Player.
+ *
+ * @apiError (404) PlayerNotFound The id of the Player was not found.
+ */
+exports.updatePlayer = async function (request, reply) {
+	try {
+		const player = await Player.get({ id: request.params.id }, ['id', 'email', 'nickname']);
+
+		if (!player) {
+			reply(Boom.notFound());
+			return;
+		}
+
+		const playerUpdated = await Player.update(request.params.id, {
+			email:    request.payload.email,
+			nickname: request.payload.nickname,
+		});
+
+		reply(playerUpdated);
+	} catch (error) {
+		logger.error(error);
+		reply(Boom.badImplementation());
+	}
+};
+
+/**
+ * @api {delete} /player/:id Delete a Player.
+ * @apiName deletePlayer
+ * @apiGroup Player
+ *
+ * @apiParam {Number} id Player unique ID.
+ *
+ * @apiSuccess (200) PlayerDeleted
+ *
+ * @apiError (404) PlayerNotFound The id of the player was not found.
+ */
+exports.deletePlayer = async function (request, reply) {
+	try {
+		const player = await Player.get({ id: request.params.id }, ['id', 'email', 'nickname']);
+
+		if (!player) {
+			reply(Boom.notFound());
+			return;
+		}
+
+		reply(await Player.delete(request.params.id));
 	} catch (error) {
 		logger.error(error);
 		reply(Boom.badImplementation());
