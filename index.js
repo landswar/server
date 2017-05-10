@@ -1,5 +1,4 @@
 const corsHeaders = require('hapi-cors-headers');
-const jwtAuth = require('hapi-auth-jwt');
 const Glue = require('glue');
 const good = require('good');
 const logger = require('winston-lludol');
