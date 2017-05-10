@@ -61,8 +61,7 @@ exports.checkToken = async function (request, reply) {
 		const token = await
 			request.server.methods.lib.verifyJwt(request.payload.token);
 
-		console.log(token);
-		if (!token) {
+		if (!token || token === 'Invalid Token') {
 			reply(Boom.badRequest('Invalid Token'));
 			return;
 		}

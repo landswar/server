@@ -29,7 +29,6 @@ class Base {
 	 */
 	update(id, attrs) {
 		return this._Model.where('id', id).fetch().then(ret => {
-			console.log(ret);
 			for (let key in attrs) {
 				ret.attributes[key] = attrs[key];
 			}
@@ -64,7 +63,6 @@ class Base {
 	 * @return {Promise} A Promise with the element found.
 	 */
 	get(idOrAttrs, columns) {
-		console.log(columns);
 		if (typeof idOrAttrs === 'number') {
 			return this._toJSON(this._Model.where('id', idOrAttrs).fetch({ columns }));
 		}
