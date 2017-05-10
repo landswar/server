@@ -1,8 +1,14 @@
 # LandsWar - Server
 
+[![LandsWar Blog](https://img.shields.io/website-up-down-green-red/https/landswar.com.svg?label=landswar.com)](https://www.landswar.com)
 [![dependency status](https://david-dm.org/landswar/server.svg)](https://david-dm.org/landswar/server)
 [![dev-dependencies status](https://david-dm.org/landswar/server/dev-status.svg)](https://david-dm.org/landswar/server#info=devDependencies)
 [![Build Status](https://travis-ci.org/landswar/server.svg?branch=master)](https://travis-ci.org/landswar/server)
+[![Code Climate](https://codeclimate.com/github/landswar/server/badges/gpa.svg)](https://codeclimate.com/github/landswar/server)
+[![Test Coverage](https://codeclimate.com/github/landswar/server/badges/coverage.svg)](https://codeclimate.com/github/landswar/server/coverage)
+
+[![Twitter URL](http://i.imgur.com/tXSoThF.png)](https://twitter.com/landswarcom)
+[![Facebook URL](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/landswarcom/)
 
 The LandsWar server which contains the API and the WebSocket server.
 
