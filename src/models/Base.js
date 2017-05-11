@@ -28,14 +28,13 @@ class Base {
 	 * @return {Promise} A Promise with the element updated.
 	 */
 	update(id, attrs) {
-		return this._Model.where('id', id).fetch().then(ret => {
-			for (let key in attrs) {
-				ret.attributes[key] = attrs[key];
+		return this._Model.where('id', id).fetch().then((ret) => {
+			const keys = Object.keys(attrs);
+			for (let i = 0; i < keys.length; i++) {
+				ret.attributes[keys[i]] = attrs[keys[i]];
 			}
 			return this._toJSON(ret.save());
-		}).catch(err => {
-			return err;
-		});
+		}).catch((err) => err);
 	}
 
 	/**
@@ -44,7 +43,7 @@ class Base {
 	 * @return {Promise} A Promise with the element deleted.
 	 */
 	delete(id) {
-		return new this._Model({id: id}).destroy();
+		return new this._Model({ id }).destroy();
 	}
 
 	/**

@@ -1,12 +1,12 @@
 module.exports = function registerStrategy(server) {
-  server.auth.strategy('token', 'jwt', {
-    key: process.env.SECRET_KEY,
-    verifyOptions: { algorithms: [ 'HS256' ] }
-  });
-  server.auth.default('token');
-}
+	server.auth.strategy('token', 'jwt', {
+		key:           process.env.SECRET_KEY,
+		verifyOptions: { algorithms: ['HS256'] },
+	});
+	server.auth.default('token');
+};
 
-//const Player = require('./../models/player');
+// const Player = require('./../models/player');
 /*
     validateFunc: async (request, decodedToken, callback) => {
       try {
