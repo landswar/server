@@ -7,7 +7,7 @@ const routes = [
 		path:    '/login',
 		handler: handler.login,
 		config:  {
-			auth: false,
+			auth:     false,
 			validate: {
 				payload: {
 					id:       Joi.string().min(1),
@@ -21,10 +21,10 @@ const routes = [
 		path:    '/checkToken',
 		handler: handler.checkToken,
 		config:  {
-			auth: false,
+			auth:     false,
 			validate: {
 				payload: {
-					token:       Joi.string().min(10),
+					token: Joi.string().min(10),
 				},
 			},
 		},

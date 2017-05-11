@@ -7,7 +7,7 @@ const routes = [
 		path:    '/players',
 		handler: handler.createPlayer,
 		config:  {
-			auth: false,
+			auth:     false,
 			validate: {
 				payload: {
 					email:    Joi.string().email(),

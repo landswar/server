@@ -66,7 +66,7 @@ exports.checkToken = async function (request, reply) {
 			return;
 		}
 
-		const player = await Player.get({id: token.id}, ['id', 'nickname', 'email']);
+		const player = await Player.get({ id: token.id }, ['id', 'nickname', 'email']);
 		if (!player) {
 			reply(Boom.notFound());
 			return;
