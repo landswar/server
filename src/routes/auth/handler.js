@@ -24,7 +24,7 @@ exports.login = async function (request, reply) {
 				{ nickname: request.payload.id };
 		const player = await Player.get(where);
 		if (!player) {
-			reply(Boom.notFound());
+			reply(Boom.notFound('Wrong email or nickname'));
 			return;
 		} else if (player.password !== request.server.methods.lib.crypt(request.payload.password)) {
 			reply(Boom.badRequest('Wrong password'));
