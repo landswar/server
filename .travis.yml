@@ -2,6 +2,9 @@ language: node_js
 node_js:
 - 7.9.0
 
+env:
+  CODECLIMATE_REPO_TOKEN: 978c7a4ef5c9e5ad72f410c779482a7299904c91fa5aba6fa693225c7e25cf68
+
 before_install:
 - openssl aes-256-cbc -K $encrypted_263db915efba_key -iv $encrypted_263db915efba_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
 - eval "$(ssh-agent -s)"
