@@ -10,7 +10,9 @@
     "debug": "nodemon --debug=0.0.0.0:5858 index.js",
     "lint": "eslint .",
     "fix-code": "eslint . --fix",
-    "generate-docs": "apidoc -i src/routes/ -o docs/"
+    "generate-docs": "apidoc -i src/routes/ -o docs/",
+    "test": "NODE_ENV=test ava",
+    "test-coverage": "nyc --reporter=html npm test"
   },
   "repository": {
     "type": "git",
@@ -49,10 +51,21 @@
   },
   "devDependencies": {
     "apidoc": "^0.17.5",
+    "ava": "^0.19.1",
     "eslint": "^3.17.1",
-    "eslint-config-lludol": "^0.1.6"
+    "eslint-config-lludol": "^0.1.6",
+    "ioredis-mock": "^2.4.0",
+    "nyc": "^10.3.2",
+    "sqlite3": "^3.1.8"
   },
   "engines": {
     "node": ">=7.0"
+  },
+  "ava": {
+    "files": [
+      "test/*.js",
+      "!test/before.js",
+      "!test/Helper.js"
+    ]
   }
 }
