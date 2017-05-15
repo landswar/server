@@ -22,6 +22,19 @@ class Base {
 	}
 
 	/**
+	 * Insert multiple element to the database.
+	 * @param {Array} elements - An array of element Object.
+	 * @return {Promise} A Promise with an array of inserted elements.
+	 */
+	createAll(elements) {
+		const promises = [];
+		elements.forEach((element) => {
+			promises.push(this.create(element));
+		});
+		return Promise.all(promises);
+	}
+
+	/**
 	 * Return every element of associated with the Model.
 	 * @return {Promise} A Promise with every element.
 	 */

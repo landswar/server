@@ -1,4 +1,4 @@
-const knex = require('knex')({
+const mysqlConfig = {
 	client:     'mysql',
 	connection: {
 		host:     '127.0.0.1',
@@ -7,7 +7,17 @@ const knex = require('knex')({
 		database: process.env.DATABASE || 'landswar',
 		charset:  'utf8',
 	},
-});
+};
+
+const sqliteConfig = {
+	client:     'sqlite3',
+	connection: {
+		filename: ':memory:',
+	},
+	useNullAsDefault: true,
+};
+
+const knex = require('knex')(process.env.NODE_ENV === 'test' ? sqliteConfig : mysqlConfig);
 
 const bookshelf = require('bookshelf')(knex);
 

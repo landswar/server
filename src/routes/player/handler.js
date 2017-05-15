@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const Player = require('./../models/player');
+const Player = require('../../models/player');
 
 /* eslint-disable valid-jsdoc */
 

@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const Unit = require('./../models/unit');
+const Unit = require('../../models/unit');
 
 /* eslint-disable valid-jsdoc */
 
