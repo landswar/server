@@ -11,8 +11,7 @@
     "lint": "eslint .",
     "fix-code": "eslint . --fix",
     "generate-docs": "apidoc -i src/routes/ -o docs/",
-    "test": "NODE_ENV=test ava",
-    "test-coverage": "nyc --reporter=html npm test"
+    "test": "NODE_ENV=test nyc --reporter=lcov ava"
   },
   "repository": {
     "type": "git",
