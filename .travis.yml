@@ -30,5 +30,6 @@ deploy:
       branch: dev
 
 after_success:
-  - npm install -g codeclimate-test-reporter
+  - npm install -g codeclimate-test-reporter codecov
   - codeclimate-test-reporter < coverage/lcov.info
+  - codecov
