@@ -1,5 +1,6 @@
 const Boom = require('boom');
 const Player = require('./../../models/player');
+const Joi = require('joi');
 
 /* eslint-disable valid-jsdoc */
 
@@ -18,10 +19,9 @@ const Player = require('./../../models/player');
  */
 exports.login = async function (request, reply) {
 	try {
-		const emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		const where = emailReg.test(request.payload.id) ?
-				{ email: request.payload.id } :
-				{ nickname: request.payload.id };
+		const where = Joi.validate(request.payload.id, Joi.string().email()).error ?
+				{ nickname: request.payload.id } :
+				{ email: request.payload.id };
 		const player = await Player.get(where);
 		if (!player) {
 			reply(Boom.notFound('Wrong email or nickname'));
@@ -34,10 +34,9 @@ exports.login = async function (request, reply) {
 		player.token = await
 			request.server.methods.lib.createToken(player.id, player.nickname);
 
-		player.password = undefined;
+		Reflect.deleteProperty(player, 'password');
 		reply(player);
 	} catch (error) {
-		logger.debug('CATCH');
 		logger.error(error);
 		reply(Boom.badImplementation());
 	}
@@ -74,7 +73,6 @@ exports.checkToken = async function (request, reply) {
 
 		reply(player);
 	} catch (error) {
-		logger.debug('CATCH');
 		logger.error(error);
 		reply(Boom.badImplementation());
 	}

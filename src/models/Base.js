@@ -47,7 +47,7 @@ class Base {
 				ret.attributes[keys[i]] = attrs[keys[i]];
 			}
 			return this._toJSON(ret.save());
-		}).catch((err) => err);
+		});
 	}
 
 	/**

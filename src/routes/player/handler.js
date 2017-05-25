@@ -85,7 +85,7 @@ exports.createPlayer = async function (request, reply) {
 		newPlayer.token = await
 			request.server.methods.lib.createToken(newPlayer.id, newPlayer.nickname);
 
-		newPlayer.password = undefined;
+		Reflect.deleteProperty(newPlayer, 'password');
 		reply(newPlayer);
 	} catch (error) {
 		logger.error(error);
