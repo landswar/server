@@ -51,7 +51,7 @@ class LandsWarLib {
 	static verifyJwt(token) {
 		return jwt.verifyAsync(token, SECRET_KEY)
 		.then((decoded) => decoded)
-		.catch(() => 'Token expired!');
+		.catch(() => 'Invalid Token');
 	}
 
 	/**

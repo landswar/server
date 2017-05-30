@@ -1,6 +1,7 @@
 const LandsWarError = require('./LandsWarError');
 const LandsWarJoi = require('./LandsWarJoi');
 const LandsWarLib = require('./LandsWarLib');
+const registerStrategy = require('./LandsWarAuth');
 
 exports.register = function (server, options, next) {
 	server.method('joi.validate', LandsWarJoi.validate);
@@ -15,6 +16,8 @@ exports.register = function (server, options, next) {
 	server.method('lib.shuffleArray', LandsWarLib.shuffleArray);
 
 	server.method('lib.crypt', LandsWarLib.crypt);
+
+	registerStrategy(server);
 
 	next();
 };

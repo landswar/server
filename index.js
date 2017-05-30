@@ -44,6 +44,7 @@ Glue.compose(manifest, options).then((server) =>
 			},
 		}),
 	])
+
 ).then(([server]) => {
 	server.method('getMap', () => JSON.stringify(map));
 

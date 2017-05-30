@@ -21,7 +21,6 @@ class LandsWarJoi {
 			Joi.validate(data, schema, { abortEarly: false }, (error, values) => {
 				if (error) {
 					error.message = error.details.map((elem) => elem.message).join('\n');
-
 					reject(error);
 				} else {
 					resolve(values);

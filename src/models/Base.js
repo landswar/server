@@ -35,23 +35,50 @@ class Base {
 	}
 
 	/**
+	 * Update an element to the database.
+	 * @param {Number} id - Id of the element to update.
+	 * @param {Object} attrs - Attributes of the element to update.
+	 * @return {Promise} A Promise with the element updated.
+	 */
+	update(id, attrs) {
+		return this._Model.where('id', id).fetch().then((ret) => {
+			const keys = Object.keys(attrs);
+			for (let i = 0; i < keys.length; i++) {
+				ret.attributes[keys[i]] = attrs[keys[i]];
+			}
+			return this._toJSON(ret.save());
+		});
+	}
+
+	/**
+	 * Delete an element from the database.
+	 * @param {Number} id - Id of the element to delete.
+	 * @return {Promise} A Promise with the element deleted.
+	 */
+	delete(id) {
+		return new this._Model({ id }).destroy();
+	}
+
+	/**
 	 * Return every element of associated with the Model.
+	 * @param {Array} columns Array of columns names to get.
 	 * @return {Promise} A Promise with every element.
 	 */
-	getAll() {
-		return this._toJSON(this._Model.fetchAll());
+	getAll(columns) {
+		return this._toJSON(this._Model.fetchAll({ columns }));
 	}
 
 	/**
 	 * Select an element where Attributes equals.
 	 * @param {Object} idOrAttrs - A number for an ID and an Object for different attributes.
+	 * @param {Array} columns Array of columns names to get.
 	 * @return {Promise} A Promise with the element found.
 	 */
-	get(idOrAttrs) {
+	get(idOrAttrs, columns) {
 		if (typeof idOrAttrs === 'number') {
-			return this._toJSON(this._Model.where('id', idOrAttrs).fetch());
+			return this._toJSON(this._Model.where('id', idOrAttrs).fetch({ columns }));
 		}
-		return this._toJSON(this._Model.where(idOrAttrs).fetch());
+		return this._toJSON(this._Model.where(idOrAttrs).fetch({ columns }));
 	}
 
 	/**
