@@ -24,7 +24,7 @@ exports.getGrounds = async function (request, reply) {
 };
 
 /**
- * @api {get} /ground/:id Request Ground information.
+ * @api {get} /grounds/:id Request Ground information.
  * @apiName getGround
  * @apiGroup Ground
  *
