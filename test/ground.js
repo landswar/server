@@ -19,3 +19,9 @@ test('/grounds GET', (t) =>
 		t.deepEqual(res.result, LandsWarDatabase.GROUNDS);
 	})
 );
+
+test('/grounds/1 GET', (t) =>
+	helper.server.inject('/grounds/1').then((res) => {
+		t.deepEqual(res.result, LandsWarDatabase.GROUNDS[0]);
+	})
+);
