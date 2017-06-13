@@ -36,12 +36,15 @@ class Base {
 
 	/**
 	 * Update an element to the database.
-	 * @param {Number} id - Id of the element to update.
+	 * @param {Object} idOrAttrs - A number for an ID and an Object for different attributes.
 	 * @param {Object} attrs - Attributes of the element to update.
 	 * @return {Promise} A Promise with the element updated.
 	 */
-	update(id, attrs) {
-		return this._Model.where('id', id).fetch().then((ret) => {
+	update(idOrAttrs, attrs) {
+		if (typeof idOrAttrs === 'number') {
+			idOrAttrs = { id: idOrAttrs };
+		}
+		return this._Model.where(idOrAttrs).fetch().then((ret) => {
 			const keys = Object.keys(attrs);
 			for (let i = 0; i < keys.length; i++) {
 				ret.attributes[keys[i]] = attrs[keys[i]];
@@ -52,11 +55,14 @@ class Base {
 
 	/**
 	 * Delete an element from the database.
-	 * @param {Number} id - Id of the element to delete.
+	 * @param {Object} idOrAttrs - A number for an ID and an Object for different attributes.
 	 * @return {Promise} A Promise with the element deleted.
 	 */
-	delete(id) {
-		return new this._Model({ id }).destroy();
+	delete(idOrAttrs) {
+		if (typeof idOrAttrs === 'number') {
+			return this._Model.where({ id: idOrAttrs }).destroy();
+		}
+		return this._Model.where(idOrAttrs).destroy();
 	}
 
 	/**

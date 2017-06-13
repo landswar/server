@@ -23,6 +23,9 @@ const routes = [
 		handler: handler.updatePlayer,
 		config:  {
 			validate: {
+				params: {
+					shortid: Joi.number(),
+				},
 				payload: {
 					email:    Joi.string().email(),
 					nickname: Joi.string().min(3),
@@ -34,6 +37,13 @@ const routes = [
 		method:  'DELETE',
 		path:    '/players/{id}',
 		handler: handler.deletePlayer,
+		config:  {
+			validate: {
+				params: {
+					id: Joi.number(),
+				},
+			},
+		},
 	},
 	{
 		method:  'GET',
@@ -44,6 +54,13 @@ const routes = [
 		method:  'GET',
 		path:    '/players/{id}',
 		handler: handler.getPlayer,
+		config:  {
+			validate: {
+				params: {
+					id: Joi.number(),
+				},
+			},
+		},
 	},
 ];
 
