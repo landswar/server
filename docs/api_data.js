@@ -253,7 +253,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/ground/:id",
+    "url": "/grounds/:id",
     "title": "Request Ground information.",
     "name": "getGround",
     "group": "Ground",
