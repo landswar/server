@@ -11,6 +11,7 @@ class LandsWarDatabase {
 	static create() {
 		return Promise.all([
 			LandsWarDatabase.createGrounds(),
+			LandsWarDatabase.createUnits(),
 		]).then(() =>
 			Promise.all([
 				LandsWarDatabase.createGroundPenalties(),
@@ -74,10 +75,47 @@ class LandsWarDatabase {
 	 */
 	static get GROUND_PENALTIES() {
 		return [
-		{ id: 1, id_ground: 1, id_unit: 1, penalty: 1 },
+			{ id: 1, id_ground: 1, id_unit: 1, penalty: 1 },
 			{ id: 2, id_ground: 2, id_unit: 1, penalty: 1 },
 			{ id: 3, id_ground: 3, id_unit: 1, penalty: 2 },
 			{ id: 4, id_ground: 4, id_unit: 1, penalty: 1 },
+		];
+	}
+
+	/**
+	 * Create the units table.
+	 * @return {Promise} A Promise.
+	 */
+	static createUnits() {
+		return Bookshelf.knex.schema
+		.dropTableIfExists('units')
+		.createTable('units', (table) => {
+			table.increments();
+			table.string('name');
+			table.integer('life');
+			table.integer('ammo1');
+			table.integer('ammo2').nullable();
+			table.integer('fuel');
+			table.integer('vision');
+			table.integer('move');
+			table.integer('rangeMin');
+			table.integer('rangeMax');
+			table.integer('cost');
+		}).then(() =>
+			Bookshelf.knex('units').insert(LandsWarDatabase.UNITS)
+		).then(() => {
+			logger.info('Database units created');
+		});
+	}
+
+	/**
+	 * Default units.
+	 * @return {Array} An array of Unit (id, name, life, ammo1, ammo2, fuel,
+	 *                 vision, move, rangeMin, rangeMax, cost).
+	 */
+	static get UNITS() {
+		return [
+			{ id: 1, name: 'infantry', life: 10, ammo1: 99, ammo2: null, fuel: 99, vision: 2, move: 3, rangeMin: 1, rangeMax: 1, cost: 1000 },
 		];
 	}
 }
