@@ -1,5 +1,6 @@
-const jwt = Promise.promisifyAll(require('jsonwebtoken'));
+const camelcaseKeys = require('camelcase-keys');
 const crypto = require('crypto');
+const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 
 const SECRET_KEY = process.env.SECRET_KEY || 'landswartopsecret';
 
@@ -76,6 +77,18 @@ class LandsWarLib {
 			array[currentIndex] = array[randomIndex];
 			array[randomIndex] = temporaryValue;
 		}
+		return array;
+	}
+
+	/**
+	 * Camelcase an array of String or Object.
+	 * @param {Array} array - The array.
+	 * @return {Array} The array with camelcased elements.
+	 */
+	static camelCaseArray(array) {
+		array.forEach((value, index, arr) => {
+			arr[index] = camelcaseKeys(value);
+		});
 		return array;
 	}
 }

@@ -1,5 +1,7 @@
 const camelcaseKeys = require('camelcase-keys');
 
+const LandsWarLib = require('../utils/LandsWarLib');
+
 /**
  * Base class to every MySQL Model.
  */
@@ -66,10 +68,7 @@ class Base {
 			}
 			const resultJson = result.toJSON();
 			if (Array.isArray(resultJson)) {
-				resultJson.forEach((value, index, array) => {
-					array[index] = camelcaseKeys(value);
-				});
-				return resultJson;
+				return LandsWarLib.camelCaseArray(resultJson);
 			}
 			return camelcaseKeys(resultJson);
 		});
