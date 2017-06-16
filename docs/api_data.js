@@ -642,8 +642,55 @@ define({ "api": [
     "groupTitle": "Player"
   },
   {
+    "type": "delete",
+    "url": "/rooms/:id",
+    "title": "Delete a Room.",
+    "name": "deleteRoom",
+    "group": "Room",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Room unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "RoomDeleted",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "RoomNotFound",
+            "description": "<p>The id of the room was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/room/handler.js",
+    "groupTitle": "Room"
+  },
+  {
     "type": "get",
-    "url": "/room/:id",
+    "url": "/rooms/:id",
     "title": "Request Room informations.",
     "name": "getRoom",
     "group": "Room",
@@ -763,7 +810,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/room",
+    "url": "/rooms",
     "title": "Create a Room.",
     "name": "postRoom",
     "group": "Room",
@@ -803,6 +850,75 @@ define({ "api": [
             "optional": false,
             "field": "shortid",
             "description": "<p>ShortID of the room.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/room/handler.js",
+    "groupTitle": "Room"
+  },
+  {
+    "type": "put",
+    "url": "/rooms/:id",
+    "title": "Update a Room.",
+    "name": "putRoom",
+    "group": "Room",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Room unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the room.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of the room.</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "maxPlayer",
+            "description": "<p>Number of players allowed to enter in the room.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "shortid",
+            "description": "<p>ShortID of the room.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "PlayerNotFound",
+            "description": "<p>The id of the Player was not found.</p>"
           }
         ]
       }
