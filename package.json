@@ -11,8 +11,8 @@
     "lint": "eslint .",
     "fix-code": "eslint . --fix",
     "generate-docs": "apidoc -i src/routes/ -o docs/",
-    "test": "NODE_ENV=test nyc ava --verbose",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "test": "NODE_ENV=test nyc --check-coverage --lines 100 --all ava --verbose",
+    "coverage": "nyc report --check-coverage --lines 100 --all --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
     "type": "git",
@@ -70,6 +70,12 @@
     ]
   },
   "nyc": {
+    "exclude": [
+      "coverage/*",
+      "docs/*",
+      "test/*",
+      "index.js"
+    ],
     "reporter": [
       "lcov",
       "text-summary"
