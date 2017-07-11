@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 const handler = require('./handler');
 
 const routes = [
@@ -7,6 +9,19 @@ const routes = [
 		handler: handler.getMaps,
 		config:  {
 			auth: false,
+		},
+	},
+	{
+		method:  'GET',
+		path:    '/maps/{id}/preview',
+		handler: handler.getMapPreview,
+		config:  {
+			auth:     false,
+			validate: {
+				params: {
+					id: Joi.number().min(1),
+				},
+			},
 		},
 	},
 ];

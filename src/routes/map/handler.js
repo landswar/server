@@ -24,3 +24,27 @@ exports.getMaps = async function (request, reply) {
 		reply(Boom.badImplementation());
 	}
 };
+
+/**
+ * @api {get} /maps/:id/preview Request the map preview.
+ * @apiName getMapPreview
+ * @apiGroup Map
+ *
+ * @apiSuccess (200) {Image} The PNG preview of the map.
+ */
+exports.getMapPreview = async function (request, reply) {
+	try {
+		const map = await Map.get({ id: request.params.id });
+
+		if (!map) {
+			reply(Boom.notFound());
+			return;
+		}
+
+		reply.file(`map_previews/map_${map.id}.png`);
+	} catch (error) {
+		logger.error(error);
+		reply(Boom.badImplementation());
+	}
+};
+
