@@ -72,4 +72,3 @@ exports.getUnit = async function (request, reply) {
 		reply(Boom.badImplementation());
 	}
 };
-

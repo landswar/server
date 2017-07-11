@@ -31,6 +31,33 @@ const routes = [
 			},
 		},
 	},
+	{
+		method:  'PUT',
+		path:    '/rooms/{shortid}',
+		handler: handler.updateRoom,
+		config:  {
+			validate: {
+				params: {
+					shortid: Joi.string().min(7).max(14),
+				},
+				payload: {
+					name: Joi.string().min(3),
+				},
+			},
+		},
+	},
+	{
+		method:  'DELETE',
+		path:    '/rooms/{shortid}',
+		handler: handler.deleteRoom,
+		config:  {
+			validate: {
+				params: {
+					shortid: Joi.string().min(7).max(14),
+				},
+			},
+		},
+	},
 ];
 
 exports.register = function (server, options, next) {

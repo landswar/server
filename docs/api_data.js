@@ -1,5 +1,130 @@
 define({ "api": [
   {
+    "type": "post",
+    "url": "/checkToken",
+    "title": "Check Token validity.",
+    "name": "checkToken",
+    "group": "Auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The token to check.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The nickname of the Player.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "nickname",
+            "description": "<p>The nickname of the Player.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "TokenNotValid",
+            "description": "<p>The token is not valid.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The user corresponding to the given token cannot be found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/auth/handler.js",
+    "groupTitle": "Auth"
+  },
+  {
+    "type": "post",
+    "url": "/login",
+    "title": "Login user.",
+    "name": "loginPlayer",
+    "group": "Auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The nickname or email of the player.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The nickname of the Player.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "nickname",
+            "description": "<p>The nickname of the Player.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The jsonwebtoken of the Player.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "PlayerNotFound",
+            "description": "<p>The id of the Player was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/auth/handler.js",
+    "groupTitle": "Auth"
+  },
+  {
     "type": "get",
     "url": "/groundPenalties",
     "title": "Request every GroundPenalty.",
@@ -233,6 +358,159 @@ define({ "api": [
     "groupTitle": "Ground"
   },
   {
+    "type": "delete",
+    "url": "/player/:id",
+    "title": "Delete a Player.",
+    "name": "deletePlayer",
+    "group": "Player",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Player unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "PlayerDeleted",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "PlayerNotFound",
+            "description": "<p>The id of the player was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/player/handler.js",
+    "groupTitle": "Player"
+  },
+  {
+    "type": "get",
+    "url": "/player/:id",
+    "title": "Request Player informations.",
+    "name": "getPlayer",
+    "group": "Player",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Player unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Player unique ID.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email of the player.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "nickname",
+            "description": "<p>Nickname of the player.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "PlayerNotFound",
+            "description": "<p>The id of the Player was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/player/handler.js",
+    "groupTitle": "Player"
+  },
+  {
+    "type": "get",
+    "url": "/players",
+    "title": "Request every Player.",
+    "name": "getPlayers",
+    "group": "Player",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "players",
+            "description": "<p>List of Players.</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "players.id",
+            "description": "<p>Player unique ID.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "players.email",
+            "description": "<p>Email of the player.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "players.nickname",
+            "description": "<p>Nickname of the player.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/player/handler.js",
+    "groupTitle": "Player"
+  },
+  {
     "type": "post",
     "url": "/player",
     "title": "Create a Player.",
@@ -288,8 +566,131 @@ define({ "api": [
     "groupTitle": "Player"
   },
   {
+    "type": "put",
+    "url": "/player/:id",
+    "title": "Update a Player.",
+    "name": "putPlayer",
+    "group": "Player",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Player unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "nickname",
+            "description": "<p>The nickname of the Player.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The email of the Player.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Player unique ID.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "nickname",
+            "description": "<p>The nickname of the Player.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The email of the Player.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "PlayerNotFound",
+            "description": "<p>The id of the Player was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/player/handler.js",
+    "groupTitle": "Player"
+  },
+  {
+    "type": "delete",
+    "url": "/rooms/:id",
+    "title": "Delete a Room.",
+    "name": "deleteRoom",
+    "group": "Room",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Room unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "RoomDeleted",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "RoomNotFound",
+            "description": "<p>The id of the room was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/room/handler.js",
+    "groupTitle": "Room"
+  },
+  {
     "type": "get",
-    "url": "/room/:id",
+    "url": "/rooms/:id",
     "title": "Request Room informations.",
     "name": "getRoom",
     "group": "Room",
@@ -409,7 +810,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/room",
+    "url": "/rooms",
     "title": "Create a Room.",
     "name": "postRoom",
     "group": "Room",
@@ -449,6 +850,75 @@ define({ "api": [
             "optional": false,
             "field": "shortid",
             "description": "<p>ShortID of the room.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/room/handler.js",
+    "groupTitle": "Room"
+  },
+  {
+    "type": "put",
+    "url": "/rooms/:id",
+    "title": "Update a Room.",
+    "name": "putRoom",
+    "group": "Room",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Room unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the room.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of the room.</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "maxPlayer",
+            "description": "<p>Number of players allowed to enter in the room.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "shortid",
+            "description": "<p>ShortID of the room.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "PlayerNotFound",
+            "description": "<p>The id of the Player was not found.</p>"
           }
         ]
       }

@@ -7,8 +7,10 @@ const routes = [
 		path:    '/players',
 		handler: handler.createPlayer,
 		config:  {
+			auth:     false,
 			validate: {
 				payload: {
+					email:    Joi.string().email(),
 					nickname: Joi.string().min(3),
 					password: Joi.string().min(3),
 				},
@@ -16,9 +18,49 @@ const routes = [
 		},
 	},
 	{
-		method:  'POST',
-		path:    '/login',
-		handler: handler.login,
+		method:  'PUT',
+		path:    '/players/{id}',
+		handler: handler.updatePlayer,
+		config:  {
+			validate: {
+				params: {
+					shortid: Joi.number(),
+				},
+				payload: {
+					email:    Joi.string().email(),
+					nickname: Joi.string().min(3),
+				},
+			},
+		},
+	},
+	{
+		method:  'DELETE',
+		path:    '/players/{id}',
+		handler: handler.deletePlayer,
+		config:  {
+			validate: {
+				params: {
+					id: Joi.number(),
+				},
+			},
+		},
+	},
+	{
+		method:  'GET',
+		path:    '/players',
+		handler: handler.getPlayers,
+	},
+	{
+		method:  'GET',
+		path:    '/players/{id}',
+		handler: handler.getPlayer,
+		config:  {
+			validate: {
+				params: {
+					id: Joi.number(),
+				},
+			},
+		},
 	},
 ];
 
