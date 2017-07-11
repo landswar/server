@@ -13,6 +13,7 @@ class LandsWarDatabase {
 			LandsWarDatabase.createGrounds(),
 			LandsWarDatabase.createRooms(),
 			LandsWarDatabase.createUnits(),
+			LandsWarDatabase.createMaps(),
 		]).then(() =>
 			Promise.all([
 				LandsWarDatabase.createGroundPenalties(),
@@ -81,6 +82,22 @@ class LandsWarDatabase {
 			{ id: 3, id_ground: 3, id_unit: 1, penalty: 2 },
 			{ id: 4, id_ground: 4, id_unit: 1, penalty: 1 },
 		];
+	}
+
+	/**
+	 * Create the maps table.
+	 * @return {Promise} A Promise.
+	 */
+	static createMaps() {
+		return Bookshelf.knex.schema
+		.dropTableIfExists('maps')
+		.createTable('maps', (table) => {
+			table.increments();
+			table.string('name');
+			table.json('data');
+		}).then(() => {
+			logger.info('Database maps created');
+		});
 	}
 
 	/**
