@@ -95,6 +95,7 @@ class LandsWarDatabase {
 			table.string('name');
 			table.integer('max_player');
 			table.string('shortid');
+			table.integer('owner');
 		}).then(() => {
 			logger.info('Database rooms created');
 		});

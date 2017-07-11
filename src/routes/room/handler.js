@@ -76,6 +76,7 @@ exports.createRoom = async function (request, reply) {
 			name:       request.payload.name,
 			max_player: 2,
 			shortid:    shortid.generate(),
+			owner:      request.auth.credentials.id,
 		});
 		room.map = request.server.methods.getMap();
 		await request.server.methods.redis.room.create(room);
@@ -84,6 +85,7 @@ exports.createRoom = async function (request, reply) {
 			name:      room.name,
 			maxPlayer: room.maxPlayer,
 			shortid:   room.shortid,
+			owner:     room.owner,
 		});
 	} catch (error) {
 		logger.error(error);
