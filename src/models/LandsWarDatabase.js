@@ -10,25 +10,39 @@ class LandsWarDatabase {
 	 */
 	static create() {
 		return Promise.all([
-			LandsWarDatabase.createGrounds(),
-			LandsWarDatabase.createMaps(),
-			LandsWarDatabase.createPlayers(),
-			LandsWarDatabase.createRooms(),
-			LandsWarDatabase.createUnits(),
-		]).then(() =>
+			LandsWarDatabase.dropTable('ground_penalties'),
+			LandsWarDatabase.dropTable('rooms'),
+		]).then(() => Promise.all([
+			LandsWarDatabase.createGrounds(true),
+			LandsWarDatabase.createMaps(true),
+			LandsWarDatabase.createPlayers(true),
+			LandsWarDatabase.createUnits(true),
+		])).then(() =>
 			Promise.all([
 				LandsWarDatabase.createGroundPenalties(),
+				LandsWarDatabase.createRooms(false),
 			])
 		);
 	}
 
 	/**
+	 * Drop a table.
+	 * @param {String} name - The name of the table.
+	 * @return {Promie} A Promise.
+	 */
+	static dropTable(name) {
+		return Bookshelf.knex.schema
+			.dropTableIfExists(name);
+	}
+
+	/**
 	 * Create the grounds table.
+	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createGrounds() {
-		return Bookshelf.knex.schema
-		.dropTableIfExists('grounds')
+	static createGrounds(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('grounds') : Bookshelf.knex.schema;
+		return dropExec
 		.createTable('grounds', (table) => {
 			table.increments();
 			table.string('name');
@@ -36,7 +50,7 @@ class LandsWarDatabase {
 		}).then(() =>
 			Bookshelf.knex('grounds').insert(LandsWarDatabase.GROUNDS)
 		).then(() => {
-			logger.info('Database grounds created');
+			logger.info('Table grounds created');
 		});
 	}
 
@@ -55,20 +69,21 @@ class LandsWarDatabase {
 
 	/**
 	 * Create the ground_penalties table.
+	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createGroundPenalties() {
-		return Bookshelf.knex.schema
-		.dropTableIfExists('ground_penalties')
+	static createGroundPenalties(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('ground_penalties') : Bookshelf.knex.schema;
+		return dropExec
 		.createTable('ground_penalties', (table) => {
 			table.increments();
-			table.integer('id_ground');
-			table.integer('id_unit');
+			table.integer('id_ground').unsigned().references('id').inTable('grounds');
+			table.integer('id_unit').unsigned().references('id').inTable('units');
 			table.integer('penalty');
 		}).then(() =>
 			Bookshelf.knex('ground_penalties').insert(LandsWarDatabase.GROUND_PENALTIES)
 		).then(() => {
-			logger.info('Database ground_penalties created');
+			logger.info('Table ground_penalties created');
 		});
 	}
 
@@ -87,60 +102,66 @@ class LandsWarDatabase {
 
 	/**
 	 * Create the maps table.
+	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createMaps() {
-		return Bookshelf.knex.schema
-		.dropTableIfExists('maps')
+	static createMaps(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('maps') : Bookshelf.knex.schema;
+		return dropExec
 		.createTable('maps', (table) => {
 			table.increments();
 			table.string('name');
 			table.json('data');
 		}).then(() => {
-			logger.info('Database maps created');
+			logger.info('Table maps created');
 		});
 	}
 
 	/**
 	 * Create the players table.
+	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createPlayers() {
-		return Bookshelf.knex.schema
-		.dropTableIfExists('players')
-		.createTable('maps', (table) => {
+	static createPlayers(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('players') : Bookshelf.knex.schema;
+		return dropExec
+		.createTable('players', (table) => {
 			table.increments();
 			table.string('nickname');
+			table.string('password');
+			table.string('email');
 		}).then(() => {
-			logger.info('Database players created');
+			logger.info('Table players created');
 		});
 	}
 
 	/**
 	 * Create the rooms table.
+	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createRooms() {
-		return Bookshelf.knex.schema
-		.dropTableIfExists('rooms')
+	static createRooms(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('rooms') : Bookshelf.knex.schema;
+		return dropExec
 		.createTable('rooms', (table) => {
 			table.increments();
 			table.string('name');
 			table.integer('max_player');
 			table.string('shortid');
-			table.integer('owner');
+			table.integer('owner').unsigned().references('id').inTable('players');
 		}).then(() => {
-			logger.info('Database rooms created');
+			logger.info('Table rooms created');
 		});
 	}
 
 	/**
 	 * Create the units table.
+	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createUnits() {
-		return Bookshelf.knex.schema
-		.dropTableIfExists('units')
+	static createUnits(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('units') : Bookshelf.knex.schema;
+		return dropExec
 		.createTable('units', (table) => {
 			table.increments();
 			table.string('name');
@@ -156,7 +177,7 @@ class LandsWarDatabase {
 		}).then(() =>
 			Bookshelf.knex('units').insert(LandsWarDatabase.UNITS)
 		).then(() => {
-			logger.info('Database units created');
+			logger.info('Table units created');
 		});
 	}
 

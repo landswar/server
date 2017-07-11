@@ -12,7 +12,8 @@
     "fix-code": "eslint . --fix",
     "generate-docs": "apidoc -i src/routes/ -o docs/",
     "test": "NODE_ENV=test nyc --check-coverage --lines 100 --all ava --verbose",
-    "coverage": "nyc report --check-coverage --lines 100 --all --reporter=text-lcov > coverage.lcov && codecov"
+    "coverage": "nyc report --check-coverage --lines 100 --all --reporter=text-lcov > coverage.lcov && codecov",
+    "create-db": "node ./scripts/createDatabase.js"
   },
   "repository": {
     "type": "git",
