@@ -358,6 +358,110 @@ define({ "api": [
     "groupTitle": "Ground"
   },
   {
+    "type": "get",
+    "url": "/maps/:id",
+    "title": "Request a Map.",
+    "name": "getMap",
+    "group": "Map",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "map.id",
+            "description": "<p>Maps unique ID.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "map.name",
+            "description": "<p>The name of the map.</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "map.data",
+            "description": "<p>A JSON which follow the JSON Map format.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/map/handler.js",
+    "groupTitle": "Map"
+  },
+  {
+    "type": "get",
+    "url": "/maps/:id/preview",
+    "title": "Request the map preview.",
+    "name": "getMapPreview",
+    "group": "Map",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Image",
+            "optional": false,
+            "field": "The",
+            "description": "<p>PNG preview of the map.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/map/handler.js",
+    "groupTitle": "Map"
+  },
+  {
+    "type": "get",
+    "url": "/maps",
+    "title": "Request every Map.",
+    "name": "getMaps",
+    "group": "Map",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "maps",
+            "description": "<p>List of Maps.</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "maps.id",
+            "description": "<p>Maps unique ID.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "maps.name",
+            "description": "<p>The name of the map.</p>"
+          },
+          {
+            "group": "200",
+            "type": "Number",
+            "optional": false,
+            "field": "maps.data",
+            "description": "<p>A JSON which follow the JSON Map format.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/map/handler.js",
+    "groupTitle": "Map"
+  },
+  {
     "type": "delete",
     "url": "/player/:id",
     "title": "Delete a Player.",
