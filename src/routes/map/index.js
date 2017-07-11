@@ -13,6 +13,19 @@ const routes = [
 	},
 	{
 		method:  'GET',
+		path:    '/maps/{id}',
+		handler: handler.getMap,
+		config:  {
+			auth:     false,
+			validate: {
+				params: {
+					id: Joi.number().min(1),
+				},
+			},
+		},
+	},
+	{
+		method:  'GET',
 		path:    '/maps/{id}/preview',
 		handler: handler.getMapPreview,
 		config:  {

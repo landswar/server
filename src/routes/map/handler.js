@@ -11,7 +11,7 @@ const Map = require('../../models/map');
  *
  * @apiSuccess (200) {Object[]} maps List of Maps.
  * @apiSuccess (200) {Number} maps.id Maps unique ID.
- * @apiSuccess (200) {String} maps.name Name of the map.
+ * @apiSuccess (200) {String} maps.name The name of the map.
  * @apiSuccess (200) {Number} maps.data A JSON which follow the JSON Map format.
  */
 exports.getMaps = async function (request, reply) {
@@ -19,6 +19,31 @@ exports.getMaps = async function (request, reply) {
 		const maps = await Map.getAll();
 
 		reply(maps);
+	} catch (error) {
+		logger.error(error);
+		reply(Boom.badImplementation());
+	}
+};
+
+/**
+ * @api {get} /maps/:id Request a Map.
+ * @apiName getMap
+ * @apiGroup Map
+ *
+ * @apiSuccess (200) {Number} map.id Maps unique ID.
+ * @apiSuccess (200) {String} map.name The name of the map.
+ * @apiSuccess (200) {Number} map.data A JSON which follow the JSON Map format.
+ */
+exports.getMap = async function (request, reply) {
+	try {
+		const map = await Map.get({ id: request.params.id });
+
+		if (!map) {
+			reply(Boom.notFound());
+			return;
+		}
+
+		reply(map);
 	} catch (error) {
 		logger.error(error);
 		reply(Boom.badImplementation());
