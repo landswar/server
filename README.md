@@ -54,6 +54,7 @@ If you have Postman installed, you can get and test all available routes with Po
 - ```yarn run debug``` To start the app with the debugger on port 5858.
 - ```yarn run lint``` To run the ESLint code check.
 - ```yarn run fix-code``` To fix simple norm errors with ESLint.
+- ```yarn run create-db``` To create the Database.
 
 ### Documentation
 
