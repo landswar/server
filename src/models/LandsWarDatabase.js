@@ -11,9 +11,10 @@ class LandsWarDatabase {
 	static create() {
 		return Promise.all([
 			LandsWarDatabase.createGrounds(),
+			LandsWarDatabase.createMaps(),
+			LandsWarDatabase.createPlayers(),
 			LandsWarDatabase.createRooms(),
 			LandsWarDatabase.createUnits(),
-			LandsWarDatabase.createMaps(),
 		]).then(() =>
 			Promise.all([
 				LandsWarDatabase.createGroundPenalties(),
@@ -97,6 +98,21 @@ class LandsWarDatabase {
 			table.json('data');
 		}).then(() => {
 			logger.info('Database maps created');
+		});
+	}
+
+	/**
+	 * Create the players table.
+	 * @return {Promise} A Promise.
+	 */
+	static createPlayers() {
+		return Bookshelf.knex.schema
+		.dropTableIfExists('players')
+		.createTable('maps', (table) => {
+			table.increments();
+			table.string('nickname');
+		}).then(() => {
+			logger.info('Database players created');
 		});
 	}
 
