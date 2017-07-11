@@ -11,6 +11,7 @@ class LandsWarDatabase {
 	static create() {
 		return Promise.all([
 			LandsWarDatabase.createGrounds(),
+			LandsWarDatabase.createRooms(),
 			LandsWarDatabase.createUnits(),
 		]).then(() =>
 			Promise.all([
@@ -65,7 +66,7 @@ class LandsWarDatabase {
 		}).then(() =>
 			Bookshelf.knex('ground_penalties').insert(LandsWarDatabase.GROUND_PENALTIES)
 		).then(() => {
-			logger.info('Database grounds created');
+			logger.info('Database ground_penalties created');
 		});
 	}
 
@@ -80,6 +81,23 @@ class LandsWarDatabase {
 			{ id: 3, id_ground: 3, id_unit: 1, penalty: 2 },
 			{ id: 4, id_ground: 4, id_unit: 1, penalty: 1 },
 		];
+	}
+
+	/**
+	 * Create the rooms table.
+	 * @return {Promise} A Promise.
+	 */
+	static createRooms() {
+		return Bookshelf.knex.schema
+		.dropTableIfExists('rooms')
+		.createTable('rooms', (table) => {
+			table.increments();
+			table.string('name');
+			table.integer('max_player');
+			table.string('shortid');
+		}).then(() => {
+			logger.info('Database rooms created');
+		});
 	}
 
 	/**
