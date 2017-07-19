@@ -136,6 +136,23 @@ class LandsWarDatabase {
 	}
 
 	/**
+	 * Create the players table.
+	 * @param {Boolean} drop - True to drop the table before create it.
+	 * @return {Promise} A Promise.
+	 */
+	static createFriendships(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('friendships') : Bookshelf.knex.schema;
+		return dropExec
+		.createTable('friendships', (table) => {
+			table.increments();
+			table.string('user_id');
+			table.string('friend_id');
+		}).then(() => {
+			logger.info('Table friendships created');
+		});
+	}
+
+	/**
 	 * Create the rooms table.
 	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.

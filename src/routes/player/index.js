@@ -24,7 +24,7 @@ const routes = [
 		config:  {
 			validate: {
 				params: {
-					shortid: Joi.number(),
+					id: Joi.number(),
 				},
 				payload: {
 					email:    Joi.string().email(),
