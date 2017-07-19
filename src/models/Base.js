@@ -90,6 +90,20 @@ class Base {
 	}
 
 	/**
+	 * Select an element and relation.
+	 * @param {Object} idOrAttrs - A number for an ID and an Object for different attributes.
+	 * @param {String} relation - The relation to call.
+	 * @param {Array} columns Array of columns names to get.
+	 * @return {Promise} A Promise with the element found.
+	 */
+	getRelated(idOrAttrs, relation, columns) {
+		if (typeof idOrAttrs === 'number') {
+			idOrAttrs = { id: idOrAttrs };
+		}
+		return this._toJSON(this._Model.forge(idOrAttrs).fetch({ withRelated: relation, columns }));
+	}
+
+	/**
 	 * Return a clean represention of an element added or fetched from the database.
 	 * @param {Promise} req - The database request.
 	 * @return {Promise} A Promise with a clean Array or Object.

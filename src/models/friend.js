@@ -6,13 +6,11 @@ const Friend = bookshelf.Model.extend({
 	tableName: 'friends',
 
 	user() {
-		console.log('user in Friend');
-		return this.belongsTo(Player);
+		return this.belongsTo(Player._Model);
 	},
 
 	friend() {
-		console.log('friend in Friend');
-		return this.belongsTo(Player, 'friend_id');
+		return this.belongsTo(Player._Model, 'friend_id');
 	},
 });
 
