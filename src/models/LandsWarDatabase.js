@@ -146,8 +146,8 @@ class LandsWarDatabase {
 		return dropExec
 		.createTable('friends', (table) => {
 			table.increments();
-			table.string('user_id').unsigned().references('id').inTable('players');
-			table.string('friend_id').unsigned().references('id').inTable('players');
+			table.integer('user_id').unsigned().references('id').inTable('players');
+			table.integer('friend_id').unsigned().references('id').inTable('players');
 		}).then(() => {
 			logger.info('Table friends created');
 		});
