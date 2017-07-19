@@ -10,8 +10,9 @@ class LandsWarDatabase {
 	 */
 	static create() {
 		return Promise.all([
-			LandsWarDatabase.dropTable('ground_penalties'),
-			LandsWarDatabase.dropTable('rooms'),
+			LandsWarDatabase.dropTableIfExists('ground_penalties'),
+			LandsWarDatabase.dropTableIfExists('rooms'),
+			LandsWarDatabase.dropTableIfExists('friends'),
 		]).then(() => Promise.all([
 			LandsWarDatabase.createGrounds(true),
 			LandsWarDatabase.createMaps(true),
@@ -20,8 +21,8 @@ class LandsWarDatabase {
 		])).then(() =>
 			Promise.all([
 				LandsWarDatabase.createGroundPenalties(),
-				LandsWarDatabase.createRooms(false),
-				LandsWarDatabase.createFriends(true),
+				LandsWarDatabase.createRooms(),
+				LandsWarDatabase.createFriends(),
 			])
 		);
 	}
@@ -31,7 +32,7 @@ class LandsWarDatabase {
 	 * @param {String} name - The name of the table.
 	 * @return {Promie} A Promise.
 	 */
-	static dropTable(name) {
+	static dropTableIfExists(name) {
 		return Bookshelf.knex.schema
 			.dropTableIfExists(name);
 	}
@@ -42,7 +43,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createGrounds(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('grounds') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('grounds') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('grounds', (table) => {
 			table.increments();
@@ -74,7 +75,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createGroundPenalties(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('ground_penalties') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('ground_penalties') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('ground_penalties', (table) => {
 			table.increments();
@@ -107,7 +108,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createMaps(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('maps') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('maps') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('maps', (table) => {
 			table.increments();
@@ -124,7 +125,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createPlayers(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('players') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('players') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('players', (table) => {
 			table.increments();
@@ -142,7 +143,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createFriends(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('friends') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('friends') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('friends', (table) => {
 			table.increments();
@@ -159,7 +160,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createRooms(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('rooms') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('rooms') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('rooms', (table) => {
 			table.increments();
@@ -178,7 +179,7 @@ class LandsWarDatabase {
 	 * @return {Promise} A Promise.
 	 */
 	static createUnits(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('units') : Bookshelf.knex.schema;
+		const dropExec = drop ? LandsWarDatabase.dropTableIfExists('units') : Bookshelf.knex.schema;
 		return dropExec
 		.createTable('units', (table) => {
 			table.increments();
