@@ -21,6 +21,7 @@ class LandsWarDatabase {
 			Promise.all([
 				LandsWarDatabase.createGroundPenalties(),
 				LandsWarDatabase.createRooms(false),
+				LandsWarDatabase.createFriends(true),
 			])
 		);
 	}
@@ -140,15 +141,15 @@ class LandsWarDatabase {
 	 * @param {Boolean} drop - True to drop the table before create it.
 	 * @return {Promise} A Promise.
 	 */
-	static createFriendships(drop = false) {
-		const dropExec = drop ? LandsWarDatabase.dropTable('friendships') : Bookshelf.knex.schema;
+	static createFriends(drop = false) {
+		const dropExec = drop ? LandsWarDatabase.dropTable('friends') : Bookshelf.knex.schema;
 		return dropExec
-		.createTable('friendships', (table) => {
+		.createTable('friends', (table) => {
 			table.increments();
-			table.string('user_id');
-			table.string('friend_id');
+			table.string('user_id').unsigned().references('id').inTable('players');
+			table.string('friend_id').unsigned().references('id').inTable('players');
 		}).then(() => {
-			logger.info('Table friendships created');
+			logger.info('Table friends created');
 		});
 	}
 
