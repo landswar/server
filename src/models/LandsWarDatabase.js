@@ -112,9 +112,25 @@ class LandsWarDatabase {
 			table.increments();
 			table.string('name');
 			table.json('data');
-		}).then(() => {
+		}).then(() =>
+			Bookshelf.knex('maps').insert(LandsWarDatabase.MAPS)
+		).then(() => {
 			logger.info('Table maps created');
 		});
+	}
+
+	/**
+	 * Default maps.
+	 * @return {Array} An array of GroundPenalty (id, id_ground, id_unit and penalty).
+	 */
+	static get MAPS() {
+		const mapTest = require('../maps/map_test/map_test.json'); // eslint-disable-line global-require
+		return [
+			{
+				name: 'Map Test',
+				data: JSON.stringify(mapTest),
+			},
+		];
 	}
 
 	/**
@@ -148,6 +164,7 @@ class LandsWarDatabase {
 			table.string('name');
 			table.integer('max_player');
 			table.string('shortid');
+			table.integer('id_map').unsigned().references('id').inTable('maps');
 			table.integer('owner').unsigned().references('id').inTable('players');
 		}).then(() => {
 			logger.info('Table rooms created');
