@@ -16,7 +16,7 @@ class RedisRoom {
 	 * @param {Object} room - The room Object.
 	 * @return {Promise} The Redis hmset Promise.
 	 */
-	static async create(room) {
+	static async create(room, map) {
 		const redisRoom = await Reflect.apply(RedisRoom.setValues, this, [
 			room.shortid, {
 				name:        room.name,
@@ -24,7 +24,7 @@ class RedisRoom {
 				nbMaxPlayer: room.maxPlayer,
 				nbTurn:      0,
 				playerTurn:  '',
-				map:         room.map,
+				map:         map.data,
 			}]);
 		return redisRoom;
 	}

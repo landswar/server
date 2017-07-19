@@ -4,7 +4,6 @@ const good = require('good');
 const logger = require('winston-lludol');
 const Promise = require('bluebird');
 
-const map = require('./map.json');
 const manifest = require('./manifest.json');
 
 global.Promise = Promise;
@@ -46,8 +45,6 @@ Glue.compose(manifest, options).then((server) =>
 	])
 
 ).then(([server]) => {
-	server.method('getMap', () => JSON.stringify(map));
-
 	server.ext('onPreResponse', corsHeaders);
 
 	server.start(() => {

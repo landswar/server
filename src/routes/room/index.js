@@ -26,7 +26,8 @@ const routes = [
 		config:  {
 			validate: {
 				payload: {
-					name: Joi.string().min(1),
+					name:  Joi.string().min(1),
+					idMap: Joi.number().min(1),
 				},
 			},
 		},

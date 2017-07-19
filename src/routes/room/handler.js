@@ -2,6 +2,7 @@ const Boom = require('boom');
 const shortid = require('shortid');
 
 const Room = require('../../models/room');
+const Map = require('../../models/map');
 
 /* eslint-disable valid-jsdoc */
 
@@ -12,6 +13,7 @@ const Room = require('../../models/room');
  *
  * @apiSuccess (200) {Object[]} rooms List of Rooms.
  * @apiSuccess (200) {Number} rooms.id Rooms unique ID.
+ * @apiSuccess (200) {Number} rooms.idMap The id of the map associated with the room.
  * @apiSuccess (200) {String} rooms.name Name of the room.
  * @apiSuccess (200) {Number} rooms.maxPlayer Number of players allowed to enter in the room.
  * @apiSuccess (200) {String} rooms.shortid ShortID of the room.
@@ -36,6 +38,7 @@ exports.getRooms = async function (request, reply) {
  *
  * @apiSuccess (200) {Number} id Rooms unique ID.
  * @apiSuccess (200) {String} name Name of the room.
+ * @apiSuccess (200) {Number} idMap The id of the map associated with the room.
  * @apiSuccess (200) {Number} maxPlayer Number of players allowed to enter in the room.
  * @apiSuccess (200) {String} shortid ShortID of the room.
  *
@@ -65,24 +68,37 @@ exports.getRoom = async function (request, reply) {
  * @apiGroup Room
  *
  * @apiParam {String} name The name of the room.
+ * @apiParam {Number} idMap The id of the map associated with the room.
  *
  * @apiSuccess (200) {String} name Name of the room.
+ * @apiSuccess (200) {Number} idMap The id of the map associated with the room.
  * @apiSuccess (200) {Number} maxPlayer Number of players allowed to enter in the room.
  * @apiSuccess (200) {String} shortid ShortID of the room.
+ *
+ * @apiError (404) MapNotFound The id of the Map was not found.
  */
 exports.createRoom = async function (request, reply) {
 	try {
+		const map = await Map.get({ id: request.payload.idMap });
+
+		if (!map) {
+			reply(Boom.notFound('Map not found'));
+			return;
+		}
+
 		const room = await Room.create({
 			name:       request.payload.name,
 			max_player: 2,
 			shortid:    shortid.generate(),
 			owner:      request.auth.credentials.id,
+			id_map:     map.id,
 		});
-		room.map = request.server.methods.getMap();
-		await request.server.methods.redis.room.create(room);
+
+		await request.server.methods.redis.room.create(room, map);
 
 		reply({
 			name:      room.name,
+			idMap:     map.id,
 			maxPlayer: room.maxPlayer,
 			shortid:   room.shortid,
 			owner:     room.owner,
