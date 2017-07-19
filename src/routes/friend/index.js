@@ -6,20 +6,31 @@ const routes = [
 		method:  'GET',
 		path:    '/friends',
 		handler: handler.getFriends,
-/*
-		config:  {
-			auth: false,
-		},
-*/
+	},
+	{
+		method:  'GET',
+		path:    '/friendsRequest',
+		handler: handler.getFriendsRequest,
 	},
 	{
 		method:  'POST',
 		path:    '/friends',
 		handler: handler.addFriend,
 		config:  {
-//			auth:     false,
 			validate: {
 				payload: {
+					friend_id: Joi.number(),
+				},
+			},
+		},
+	},
+	{
+		method:  'DELETE',
+		path:    '/friends/{friend_id}',
+		handler: handler.deleteFriend,
+		config:  {
+			validate: {
+				params: {
 					friend_id: Joi.number(),
 				},
 			},
