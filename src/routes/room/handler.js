@@ -133,7 +133,8 @@ exports.updateRoom = async function (request, reply) {
 		}
 
 		const roomUpdated = await Room.update({ shortid: request.params.shortid }, {
-			name: request.payload.name,
+			name:   request.payload.name,
+			id_map: request.payload.idMap,
 		});
 
 		reply(roomUpdated);

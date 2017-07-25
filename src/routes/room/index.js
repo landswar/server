@@ -42,7 +42,8 @@ const routes = [
 					shortid: Joi.string().min(7).max(14),
 				},
 				payload: {
-					name: Joi.string().min(3),
+					name:  Joi.string().min(3),
+					idMap: Joi.number().min(1),
 				},
 			},
 		},
