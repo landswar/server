@@ -15,11 +15,11 @@ const LandsWarLib = require('../src/utils/LandsWarLib');
 const helper = new Helper();
 
 test.before(() =>
-	LandsWarDatabase.createGrounds().then(() =>
-		LandsWarDatabase.createGroundPenalties().then(() => {
-			helper.registerPlugins([GroundPenaltyPlugin]);
-		})
-	)
+//	LandsWarDatabase.createGrounds(true).then(() =>
+//		LandsWarDatabase.createGroundPenalties(true).then(() => {
+			helper.registerPlugins([GroundPenaltyPlugin])
+//		})
+//	)
 );
 
 test('/groundPenalties GET', (t) =>

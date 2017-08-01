@@ -93,7 +93,6 @@ exports.createRoom = async function (request, reply) {
 			owner:      request.auth.credentials.id,
 			id_map:     map.id,
 		});
-
 		await request.server.methods.redis.room.create(room, map);
 
 		reply({

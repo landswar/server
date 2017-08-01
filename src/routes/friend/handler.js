@@ -29,7 +29,6 @@ exports.addFriend = async function (request, reply) {
 			reply(Boom.badRequest('You are already friend'));
 			return;
 		}
-
 		const friend = await Player.get(friendId, ['id', 'nickname', 'email']);
 		if (!friend) {
 			reply(Boom.notFound());

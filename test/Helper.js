@@ -41,6 +41,23 @@ class Helper {
 	inject(params) {
 		return this.server.inject(params);
 	}
+
+	/**
+	 * Return options for request
+	 * @param {String} method method of the request
+	 * @param {String} url url to call
+	 * @param {String} token Authorization token
+	 */
+	getOptions(method, url, token, payload) {
+		return {
+			method,
+			url,
+			payload,
+			headers: {
+				Authorization: token ? `Bearer ${token}` : undefined,
+			},
+		};
+	}
 }
 
 module.exports = Helper;

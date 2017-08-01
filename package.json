@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "fix-code": "eslint . --fix",
     "generate-docs": "apidoc -i src/routes/ -o docs/",
-    "test": "NODE_ENV=test nyc --check-coverage --lines 100 --all ava --verbose",
+    "test": "NODE_ENV=test nyc --check-coverage --lines 100 --all ava --verbose --serial",
     "coverage": "nyc report --check-coverage --lines 100 --all --reporter=text-lcov > coverage.lcov && codecov",
     "create-db": "node ./scripts/createDatabase.js"
   },
@@ -47,6 +47,7 @@
     "jsonwebtoken": "^7.3.0",
     "knex": "^0.12.7",
     "mysql": "^2.13.0",
+    "nodemon": "^1.11.0",
     "shortid": "^2.2.8",
     "socket.io": "^1.7.3",
     "socket.io-as-promised": "^1.0.0",

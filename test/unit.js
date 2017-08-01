@@ -13,9 +13,9 @@ const LandsWarDatabase = require('../src/models/LandsWarDatabase');
 const helper = new Helper();
 
 test.before(() =>
-	LandsWarDatabase.createUnits().then(() => {
-		helper.registerPlugins([UnitPlugin]);
-	})
+//	return LandsWarDatabase.createUnits(true).then(() => {
+		helper.registerPlugins([UnitPlugin])
+//	});
 );
 
 test('/units GET', (t) =>

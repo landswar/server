@@ -13,9 +13,9 @@ const LandsWarDatabase = require('../src/models/LandsWarDatabase');
 const helper = new Helper();
 
 test.before(() =>
-	LandsWarDatabase.createGrounds().then(() => {
-		helper.registerPlugins([GroundPlugin]);
-	})
+//	LandsWarDatabase.createGrounds(true).then(() => {
+		helper.registerPlugins([GroundPlugin])
+//	})
 );
 
 test('/grounds GET', (t) =>
