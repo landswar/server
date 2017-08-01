@@ -9,7 +9,7 @@ const after = function (server, next) {
 	io.on('connection', (socket) => {
 		logger.info(`[socket] New connection ${socket.id}`);
 
-		socket.on('room:join', handler.join);
+		socket.on('room:join', (data, callback) => handler.join(socket, data, callback));
 	});
 
 	return next();

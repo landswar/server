@@ -7,9 +7,25 @@ exports.setServerInstance = function (serverInstance) {
 	server = serverInstance;
 };
 
-exports.join = async function (data, callback) {
+exports.join = async function (socket, data, callback) {
 	const redisMethods = server.methods.redis;
 	logger.debug('[SOCKET] room:join', data);
+
+	/**
+	 * Join the Socket room and send a broadcast to it.
+	 * @param {String} shortIdRoom - The short id of the Room.
+	 * @param {Number} id - The user unique id.
+	 * @param {String} nickname - The nickname of the user.
+	 * @param {Boolean} isNew - True if the user is new to the room.
+	 */
+	function joinAndBroadcast(shortIdRoom, id, nickname, isNew) {
+		socket.join(shortIdRoom);
+		socket.to(shortIdRoom).emit('room:joined', {
+			id,
+			nickname,
+			isNew,
+		});
+	}
 
 	try {
 		const schema = server.methods.joi.getSchema(['tokenPlayer', 'shortIdRoom']);
@@ -24,8 +40,11 @@ exports.join = async function (data, callback) {
 		const isPlayerInRoom = await redisMethods.player.exists(values.shortIdRoom, decoded.id);
 
 		if (isPlayerInRoom) {
+			joinAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname, false);
 			return callback(room);
-		} else if (server.plugins['websocket.room'].isFreeSpace(room)) {
+		}
+
+		if (server.plugins['websocket.room'].isFreeSpace(room)) {
 			await redisMethods.player.create(values.shortIdRoom, {
 				id:       decoded.id,
 				nickname: decoded.nickname,
@@ -39,7 +58,7 @@ exports.join = async function (data, callback) {
 				RoomService.start(values.shortIdRoom, room);
 			}
 
-			// BROADCAST roomPlayerJoined
+			joinAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname, true);
 			return callback(room);
 		}
 

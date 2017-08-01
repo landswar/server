@@ -14,6 +14,7 @@ class RedisRoom {
 	/**
 	 * Create a new room hash in the Redis database.
 	 * @param {Object} room - The room Object.
+	 * @param {Object} map - The map Object.
 	 * @return {Promise} The Redis hmset Promise.
 	 */
 	static async create(room, map) {
