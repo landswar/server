@@ -84,7 +84,7 @@ exports.deleteFriend = async function (request, reply) {
 				friend_id: userId,
 			});
 		}
-		reply();
+		reply({});
 	} catch (error) {
 		logger.error(error);
 		reply(Boom.badImplementation());
