@@ -1,5 +1,6 @@
-const redisPlayer = require('./redisPlayer');
 const redisRoom = require('./redisRoom');
+const redisPlayer = require('./redisPlayer');
+const redisUnit = require('./redisUnit');
 
 const after = function (server, next) {
 	const bind = {
@@ -19,12 +20,16 @@ const after = function (server, next) {
 	server.method('redis.player.get', redisPlayer.getAllPlayerInRoom, bind);
 	server.method('redis.player.exists', redisPlayer.exists, bind);
 
+	/* Unit */
+	server.method('redis.unit.create', redisUnit.create, bind);
+	server.method('redis.unit.remove', redisUnit.remove, bind);
+	server.method('redis.unit.get', redisUnit.get, bind);
+
 	return next();
 };
 
 exports.register = function (server, options, next) {
 	server.dependency('hapi-ioredis', after);
-
 	next();
 };
 

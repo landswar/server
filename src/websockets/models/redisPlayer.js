@@ -27,6 +27,30 @@ class RedisPlayer {
 	}
 
 	/**
+	 * Return the content of a player in the Redis database.
+	 * @param  {String} shortIdRoom - The shortid of the room.
+	 * @param  {String} idPlayer - The id of the player.
+	 * @return {Promise} A promise with the player (null if not found).
+	 */
+	static async get(shortIdRoom, idPlayer) {
+		const player = await this.redis.hgetall(RedisPlayer.getKey(shortIdRoom, idPlayer));
+		if (this.lib.isObjectEmpty(player)) {
+			return null;
+		}
+		return player;
+	}
+
+	/**
+	 * Remove an existing player hash from the Redis database.
+	 * @param {String} shortIdRoom - The shortid of the room.
+	 * @param {Object} player - The player Object.
+	 * @return {Promise} The Redis del Promise.
+	 */
+	static remove(shortIdRoom, player) {
+		return this.redis.del(RedisPlayer.getKey(shortIdRoom, player.id));
+	}
+
+	/**
 	 * Return a Promise with every key of player in a room.
 	 * @param  {String} shortIdRoom - The shortid of the room.
 	 * @return {Promise} A Promise with an array of id.

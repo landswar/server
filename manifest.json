@@ -56,6 +56,7 @@
 		{ "plugin": "./src/routes/auth/index", "options": { "select": "api" } },
 		{ "plugin": "./src/routes/unit/index", "options": { "select": "api" } },
 		{ "plugin": "./src/routes/map/index", "options": { "select": "api" } },
-		{ "plugin": "./src/websockets/room/index", "options": { "select": "websocket" } }
+		{ "plugin": "./src/websockets/room/index", "options": { "select": "websocket" } },
+		{ "plugin": "./src/websockets/unit/index" }
 	]
 }

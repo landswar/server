@@ -4,6 +4,7 @@ const LandsWarError = require('./LandsWarError').LandsWarError;
 const defaultSchema = {
 	tokenPlayer: Joi.string().required(),
 	shortIdRoom: Joi.string().min(7).max(14).required(),
+	idUnit:      Joi.number().min(1),
 };
 
 /**

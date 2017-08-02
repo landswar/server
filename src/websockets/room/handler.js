@@ -55,7 +55,7 @@ exports.join = async function (socket, data, callback) {
 			});
 
 			if (!server.plugins['websocket.room'].isFreeSpace(room)) {
-				RoomService.start(values.shortIdRoom, room);
+//				RoomService.start(values.shortIdRoom, room);
 			}
 
 			joinAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname, true);
@@ -63,6 +63,57 @@ exports.join = async function (socket, data, callback) {
 		}
 
 		return callback({ message: 'No space left in the room' });
+	} catch (error) {
+		return server.methods.error.handleSocket(error, callback);
+	}
+};
+
+exports.exit = async function (socket, data, callback) {
+	const redisMethods = server.methods.redis;
+	logger.debug('[SOCKET] room:exit', data);
+
+	/**
+	 * Join the Socket room and send a broadcast to it.
+	 * @param {String} shortIdRoom - The short id of the Room.
+	 * @param {Number} id - The user unique id.
+	 * @param {String} nickname - The nickname of the user.
+	 * @param {Boolean} isNew - True if the user is new to the room.
+	 */
+	function exitAndBroadcast(shortIdRoom, id, nickname) {
+		socket.leave(shortIdRoom);
+		socket.to(shortIdRoom).emit('room:exited', {
+			id,
+			nickname,
+		});
+	}
+
+	try {
+		const schema = server.methods.joi.getSchema(['tokenPlayer', 'shortIdRoom']);
+		const values = await server.methods.joi.validate(data, schema);
+		const decoded = await server.methods.lib.verifyJwt(values.tokenPlayer);
+		const room = await redisMethods.room.get(values.shortIdRoom);
+
+		if (!room) {
+			return callback(Boom.notFound('Room not found').output.payload);
+		}
+
+		const isPlayerInRoom = await redisMethods.player.exists(values.shortIdRoom, decoded.id);
+
+		if (!isPlayerInRoom) {
+			return callback(Boom.badRequest('You\'re not in this room').output.payload);
+		}
+
+		await redisMethods.player.remove(values.shortIdRoom, {
+			id:       decoded.id,
+			nickname: decoded.nickname,
+		});
+		--room.nbPlayer;
+		await redisMethods.room.setValues(values.shortIdRoom, {
+			nbPlayer: room.nbPlayer,
+		});
+
+		exitAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname);
+		return callback(room);
 	} catch (error) {
 		return server.methods.error.handleSocket(error, callback);
 	}

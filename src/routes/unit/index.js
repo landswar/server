@@ -6,12 +6,16 @@ const routes = [
 		method:  'GET',
 		path:    '/units',
 		handler: handler.getUnits,
+		config:  {
+			auth: false,
+		},
 	},
 	{
 		method:  'GET',
 		path:    '/units/{id}',
 		handler: handler.getUnit,
 		config:  {
+			auth:     false,
 			validate: {
 				params: {
 					id: Joi.number().min(1),

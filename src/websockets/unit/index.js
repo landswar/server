@@ -1,6 +1,5 @@
 const socketAsPromised = require('socket.io-as-promised');
 const handler = require('./handler');
-const RoomService = require('./service');
 
 const after = function (server, next) {
 	const io = server.plugins.hapio.io;
@@ -9,8 +8,8 @@ const after = function (server, next) {
 	io.on('connection', (socket) => {
 		logger.info(`[socket] New connection ${socket.id}`);
 
-		socket.on('room:join', (data, callback) => handler.join(socket, data, callback));
-		socket.on('room:exit', (data, callback) => handler.exit(socket, data, callback));
+		socket.on('unit:create', (data, callback) => handler.create(socket, data, callback));
+		socket.on('unit:remove', (data, callback) => handler.remove(socket, data, callback));
 	});
 
 	return next();
@@ -18,16 +17,12 @@ const after = function (server, next) {
 
 exports.register = function (server, options, next) {
 	handler.setServerInstance(server);
-
 	server.dependency('hapio', after);
-
-	const roomService = RoomService(server);
-	server.expose('isFreeSpace', roomService.isFreeSpace);
 
 	next();
 };
 
 exports.register.attributes = {
-	name:    'websocket.room',
+	name:    'websocket.unit',
 	version: '0.0.1',
 };
