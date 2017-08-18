@@ -14,6 +14,26 @@ class RedisUnit {
 	}
 
 	/**
+	 * Unit to parse (cast string to int)
+	 * @param {Object} unit The unit to parse
+	 * @return {Object} The unit parsed
+	 */
+	static parseModel(unit) {
+		unit.move = +unit.move;
+		unit.ammo1 = +unit.ammo1;
+		unit.ammo2 = +unit.ammo2;
+		unit.fuel = +unit.fuel;
+		unit.rangeMin = +unit.rangeMin;
+		unit.rangeMax = +unit.rangeMax;
+		unit.cost = +unit.cost;
+		unit.vision = +unit.vision;
+		unit.x = +unit.x;
+		unit.y = +unit.y;
+		unit.life = +unit.life;
+		return unit;
+	}
+
+	/**
 	 * Return the next redis id to give for a the created unit.
 	 * @param  {String} shortIdRoom - The shortid of the room.
 	 * @param  {Number} idPlayer - The id of the player.
@@ -38,7 +58,7 @@ class RedisUnit {
 	}
 
 	/**
-	 * Create a new player hash in the Redis database.
+	 * Create a new unit hash in the Redis database.
 	 * @param {String} shortIdRoom - The shortid of the room.
 	 * @param {Object} idPlayer - The player id.
 	 * @param {Object} unit - The unit Object.
@@ -46,24 +66,29 @@ class RedisUnit {
 	 */
 	static async create(shortIdRoom, idPlayer, unit) {
 		unit.redisId = await Reflect.apply(RedisUnit.getUnitId, this, [shortIdRoom, idPlayer]);
+		unit.idPlayer = idPlayer;
+		unit.shortIdRoom = shortIdRoom;
+		unit.x = 0;
+		unit.y = 0;
 		await Reflect.apply(RedisUnit.setValues, this,
 			[shortIdRoom, idPlayer, unit.redisId, unit]);
 		return unit;
 	}
 
 	/**
-	 * Return the content of a player in the Redis database.
+	 * Return the content of a unit in the Redis database.
 	 * @param  {String} shortIdRoom - The shortid of the room.
 	 * @param  {String} idPlayer - The id of the player.
 	 * @param  {Number} redisIdUnit - The id of the unit (in redis DB).
 	 * @return {Promise} A promise with the player (null if not found).
 	 */
 	static async get(shortIdRoom, idPlayer, redisIdUnit) {
+		console.log(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 		const unit = await this.redis.hgetall(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 		if (this.lib.isObjectEmpty(unit)) {
 			return null;
 		}
-		return unit;
+		return RedisUnit.parseModel(unit);
 	}
 
 	/**
@@ -99,6 +124,34 @@ class RedisUnit {
 
 			stream.on('end', () => {
 				resolve(ids);
+			});
+		});
+	}
+
+	/**
+	 * Return a Promise with every key of unit of the player.
+	 * @param  {String} shortIdRoom - The shortid of the room.
+	 * @param  {String} idUnit - The id of the Unit.
+	 * @return {Promise} A Promise with an array of id.
+	 */
+	static getUnitById(shortIdRoom, idUnit) {
+		return new Promise((resolve) => {
+			let unitKey = null;
+			const stream = this.redis.scanStream({
+				match: `unit:${shortIdRoom}:*:${idUnit}`,
+			});
+
+			stream.on('data', (keysResult) => {
+				unitKey = keysResult[0];
+			});
+
+			stream.on('end', async () => {
+				if (!unitKey) {
+					resolve(false);
+				} else {
+					const unit = await this.redis.hgetall(unitKey);
+					resolve(RedisUnit.parseModel(unit));
+				}
 			});
 		});
 	}

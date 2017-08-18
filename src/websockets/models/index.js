@@ -24,6 +24,8 @@ const after = function (server, next) {
 	server.method('redis.unit.create', redisUnit.create, bind);
 	server.method('redis.unit.remove', redisUnit.remove, bind);
 	server.method('redis.unit.get', redisUnit.get, bind);
+	server.method('redis.unit.getUnitById', redisUnit.getUnitById, bind);
+	server.method('redis.unit.setValues', redisUnit.setValues, bind);
 
 	return next();
 };

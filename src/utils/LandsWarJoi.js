@@ -2,9 +2,15 @@ const Joi = require('joi');
 const LandsWarError = require('./LandsWarError').LandsWarError;
 
 const defaultSchema = {
-	tokenPlayer: Joi.string().required(),
-	shortIdRoom: Joi.string().min(7).max(14).required(),
-	idUnit:      Joi.number().min(1),
+	/* General */
+	tokenPlayer:   Joi.string().required(),
+	shortIdRoom:   Joi.string().min(7).max(14).required(),
+	x:             Joi.number().min(0),
+	y:             Joi.number().min(0),
+	/* Unit */
+	idUnit:        Joi.number().min(1),
+	redisIdUnit:   Joi.number().min(0),
+	redisIdTarget: Joi.number().min(0),
 };
 
 /**
