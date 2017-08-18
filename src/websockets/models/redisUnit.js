@@ -83,7 +83,6 @@ class RedisUnit {
 	 * @return {Promise} A promise with the player (null if not found).
 	 */
 	static async get(shortIdRoom, idPlayer, redisIdUnit) {
-		console.log(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 		const unit = await this.redis.hgetall(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 		if (this.lib.isObjectEmpty(unit)) {
 			return null;
@@ -99,7 +98,6 @@ class RedisUnit {
 	 * @return {Promise} The Redis del Promise.
 	 */
 	static remove(shortIdRoom, idPlayer, redisIdUnit) {
-		console.log(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 		return this.redis.del(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 	}
 
@@ -177,8 +175,6 @@ class RedisUnit {
 	 * @return {Promise} The Redis hmset Promise.
 	 */
 	static setValues(shortIdRoom, idPlayer, redisIdUnit, values) {
-		console.log("set unit");
-		console.log(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit));
 		return this.redis.hmset(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit), values);
 	}
 }
