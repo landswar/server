@@ -9,6 +9,7 @@ const knex = require('knex')({
 		database: env === 'test' ? 'landswar_test' : 'landswar',
 		charset:  'utf8',
 	},
+	useNullAsDefault: true,
 });
 
 const bookshelf = require('bookshelf')(knex);
