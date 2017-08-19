@@ -6,12 +6,16 @@ const routes = [
 		method:  'GET',
 		path:    '/grounds',
 		handler: handler.getGrounds,
+		config:  {
+			auth: false,
+		},
 	},
 	{
 		method:  'GET',
 		path:    '/grounds/{id}',
 		handler: handler.getGround,
 		config:  {
+			auth:     false,
 			validate: {
 				params: {
 					id: Joi.number().min(1),
