@@ -1,5 +1,4 @@
 const Boom = require('boom');
-const RoomService = require('./service');
 
 let server = null;
 
@@ -7,7 +6,7 @@ exports.setServerInstance = function (serverInstance) {
 	server = serverInstance;
 };
 
-exports.join = async function (socket, data, callback) {
+exports.join = async function (io, socket, data, callback) {
 	const redisMethods = server.methods.redis;
 	logger.debug('[SOCKET] room:join', data);
 
@@ -19,12 +18,34 @@ exports.join = async function (socket, data, callback) {
 	 * @param {Boolean} isNew - True if the user is new to the room.
 	 */
 	function joinAndBroadcast(shortIdRoom, id, nickname, isNew) {
+		socket.playerId = id;
 		socket.join(shortIdRoom);
 		socket.to(shortIdRoom).emit('room:joined', {
 			id,
 			nickname,
 			isNew,
 		});
+	}
+
+	/**
+	 * Start the game if it has to be started.
+	 * @param {String} shortIdRoom - The short id of the Room.
+	 * @param {Object} room - The Room Object from the Redis database.
+	 */
+	async function startGameAndBroadcast(shortIdRoom, room) {
+		if (room.nbTurn === 0 && !server.plugins['websocket.room'].isFreeSpace(room)) {
+			const gameData = await server.plugins['websocket.room'].start(shortIdRoom, room);
+
+			const clients = Object.keys(io.sockets.adapter.rooms[shortIdRoom].sockets);
+			clients.forEach((clientId) => {
+				const clientSocket = io.sockets.connected[clientId];
+
+				clientSocket.emit('game:nextPlayer', {
+					nbTurn:   gameData.nbTurn,
+					yourTurn: clientSocket.playerId === gameData.playerTurn,
+				});
+			});
+		}
 	}
 
 	try {
@@ -41,7 +62,9 @@ exports.join = async function (socket, data, callback) {
 
 		if (isPlayerInRoom) {
 			joinAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname, false);
-			return callback(room);
+			callback(room);
+			startGameAndBroadcast(values.shortIdRoom, room);
+			return Promise.resolve();
 		}
 
 		if (server.plugins['websocket.room'].isFreeSpace(room)) {
@@ -54,12 +77,13 @@ exports.join = async function (socket, data, callback) {
 				nbPlayer: room.nbPlayer,
 			});
 
-			if (!server.plugins['websocket.room'].isFreeSpace(room)) {
-//				RoomService.start(values.shortIdRoom, room);
-			}
-
 			joinAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname, true);
-			return callback(room);
+
+			callback(room);
+
+			await startGameAndBroadcast(values.shortIdRoom, room);
+
+			return Promise.resolve();
 		}
 
 		return callback({ message: 'No space left in the room' });
@@ -68,20 +92,19 @@ exports.join = async function (socket, data, callback) {
 	}
 };
 
-exports.exit = async function (socket, data, callback) {
+exports.leave = async function (socket, data, callback) {
 	const redisMethods = server.methods.redis;
-	logger.debug('[SOCKET] room:exit', data);
+	logger.debug('[SOCKET] room:leave', data);
 
 	/**
-	 * Join the Socket room and send a broadcast to it.
+	 * Leave the Socket room and broadcast it.
 	 * @param {String} shortIdRoom - The short id of the Room.
 	 * @param {Number} id - The user unique id.
 	 * @param {String} nickname - The nickname of the user.
-	 * @param {Boolean} isNew - True if the user is new to the room.
 	 */
-	function exitAndBroadcast(shortIdRoom, id, nickname) {
+	function leaveAndBroadCast(shortIdRoom, id, nickname) {
 		socket.leave(shortIdRoom);
-		socket.to(shortIdRoom).emit('room:exited', {
+		socket.to(shortIdRoom).emit('room:left', {
 			id,
 			nickname,
 		});
@@ -112,7 +135,7 @@ exports.exit = async function (socket, data, callback) {
 			nbPlayer: room.nbPlayer,
 		});
 
-		exitAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname);
+		leaveAndBroadCast(values.shortIdRoom, decoded.id, decoded.nickname);
 		return callback(room);
 	} catch (error) {
 		return server.methods.error.handleSocket(error, callback);
