@@ -7,8 +7,6 @@ const after = function (server, next) {
 	io.use(socketAsPromised());
 
 	io.on('connection', (socket) => {
-		logger.info(`[socket] New connection ${socket.id}`);
-
 		socket.on('unit:create', (data, callback) => handler.create(socket, data, callback));
 		socket.on('unit:remove', (data, callback) => handler.remove(socket, data, callback));
 		socket.on('unit:move', (data, callback) => handler.move(socket, data, callback));
