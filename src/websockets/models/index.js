@@ -18,6 +18,7 @@ const after = function (server, next) {
 	/* Player */
 	server.method('redis.player.create', redisPlayer.create, bind);
 	server.method('redis.player.get', redisPlayer.getAllPlayerInRoom, bind);
+	server.method('redis.player.getAllPlayerInRoom', redisPlayer.getAllPlayerInRoom, bind);
 	server.method('redis.player.exists', redisPlayer.exists, bind);
 
 	/* Unit */
