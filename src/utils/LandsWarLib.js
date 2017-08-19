@@ -52,7 +52,7 @@ class LandsWarLib {
 	static verifyJwt(token) {
 		return jwt.verifyAsync(token, SECRET_KEY)
 		.then((decoded) => decoded)
-		.catch(() => 'Invalid Token');
+		.catch(() => Promise.reject('Invalid Token'));
 	}
 
 	/**
