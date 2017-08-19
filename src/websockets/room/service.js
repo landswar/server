@@ -1,3 +1,5 @@
+const RedisPlayer = require('./../models/redisPlayer');
+
 /**
  * Static class to handle the game/model logic.
  */
@@ -24,11 +26,14 @@ class RoomService {
 		redisRoom.playersOrders = RoomService.lib.shuffleArray(ids);
 		redisRoom.playerTurn = redisRoom.playersOrders[0];
 
-		return RoomService.redisModels.room.setValues({
+		const gameData = {
 			nbTurn:        redisRoom.nbTurn,
 			playersOrders: redisRoom.playersOrders.join(),
 			playerTurn:    redisRoom.playerTurn,
-		});
+		};
+
+		await RoomService.redisModels.room.setValues(shortIdRoom, gameData);
+		return gameData;
 	}
 }
 
