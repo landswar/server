@@ -32,8 +32,7 @@ Coming soon...
 
 ## How to run locally?
 
-I use async/await so you need node.js v7 minimum to run it with the harmony flag: ```--harmony-async-await```.
-Since the v7.6.0, async/await have been ported so you don't need to use the flag.
+I use async/await so you need node.js v8.
 
 You need first to install ```docker-compose``` to start databases (Percona and Redis).
 

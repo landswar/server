@@ -64,7 +64,7 @@
     "sqlite3": "^3.1.8"
   },
   "engines": {
-    "node": ">=7.0"
+    "node": ">=8.0"
   },
   "ava": {
     "files": [
