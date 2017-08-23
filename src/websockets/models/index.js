@@ -27,6 +27,7 @@ const after = function (server, next) {
 	server.method('redis.unit.get', redisUnit.get, bind);
 	server.method('redis.unit.getUnitById', redisUnit.getUnitById, bind);
 	server.method('redis.unit.setValues', redisUnit.setValues, bind);
+	server.method('redis.unit.getAllUnitInRoom', redisUnit.getAllUnitInRoom, bind);
 
 	return next();
 };

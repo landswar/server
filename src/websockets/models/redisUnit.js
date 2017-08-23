@@ -6,55 +6,41 @@ class RedisUnit {
 	 * Return the player key in the Redis DB.
 	 * @param  {String} shortIdRoom - The shortid of the room.
 	 * @param  {Number} idPlayer - The id of the player.
-	 * @param  {Number} redisIdUnit - The mysql id of the unit.
+	 * @param  {Number} redisIdUnit - The Redis unique ID of the Unit.
 	 * @return {String} The key.
 	 */
-	static getKey(shortIdRoom, idPlayer, redisIdUnit) {
+	static getKey(shortIdRoom = '*', idPlayer = '*', redisIdUnit = '*') {
 		return `unit:${shortIdRoom}:${idPlayer}:${redisIdUnit}`;
 	}
 
 	/**
-	 * Unit to parse (cast string to int)
-	 * @param {Object} unit The unit to parse
-	 * @return {Object} The unit parsed
+	 * Return the Redis unique ID key for a Player in a Room.
+	 * @param {String} shortIdRoom - The shortid of the room.
+	 * @param {Number} idPlayer - The id of the player.
+	 * @return {String} The key.
 	 */
-	static parseModel(unit) {
-		unit.move = +unit.move;
-		unit.ammo1 = +unit.ammo1;
-		unit.ammo2 = +unit.ammo2;
-		unit.fuel = +unit.fuel;
-		unit.rangeMin = +unit.rangeMin;
-		unit.rangeMax = +unit.rangeMax;
-		unit.cost = +unit.cost;
-		unit.vision = +unit.vision;
-		unit.x = +unit.x;
-		unit.y = +unit.y;
-		unit.life = +unit.life;
-		return unit;
+	static getRedisIdKey(shortIdRoom, idPlayer) {
+		return `unit:${shortIdRoom}:${idPlayer}`;
 	}
 
 	/**
-	 * Return the next redis id to give for a the created unit.
+	 * Return the next unique unit ID for the Redis database.
 	 * @param  {String} shortIdRoom - The shortid of the room.
 	 * @param  {Number} idPlayer - The id of the player.
-	 * @return {Number} Id of the unit.
+	 * @return {Number} The next ID.
 	 */
-	static async getUnitId(shortIdRoom, idPlayer) {
-		/**
-		 * @return {String} The key of the unit id incrementeur
-		 */
-		function getKey() {
-			return `unit:id:${shortIdRoom}:${idPlayer}`;
+	static async getNextRedisId(shortIdRoom, idPlayer) {
+		const exist = await this.redis.exists(RedisUnit.getRedisIdKey(shortIdRoom, idPlayer));
+
+		let currentId = 1;
+		if (exist) {
+			await this.redis.incr(RedisUnit.getRedisIdKey(shortIdRoom, idPlayer));
+			currentId = await this.redis.get(RedisUnit.getRedisIdKey(shortIdRoom, idPlayer));
+		} else {
+			await this.redis.set(RedisUnit.getRedisIdKey(shortIdRoom, idPlayer), 1);
 		}
 
-		const exist = await this.redis.exists(getKey());
-		if (!exist) {
-			await this.redis.set(getKey(), 0);
-		}
-		let ret = await this.redis.get(getKey());
-		++ret;
-		await this.redis.set(getKey(), ret);
-		return ret;
+		return currentId;
 	}
 
 	/**
@@ -65,13 +51,52 @@ class RedisUnit {
 	 * @return {Promise} The Redis hmset Promise.
 	 */
 	static async create(shortIdRoom, idPlayer, unit) {
-		unit.redisId = await Reflect.apply(RedisUnit.getUnitId, this, [shortIdRoom, idPlayer]);
-		unit.idPlayer = idPlayer;
-		unit.shortIdRoom = shortIdRoom;
-		unit.x = 0;
-		unit.y = 0;
-		await Reflect.apply(RedisUnit.setValues, this,
-			[shortIdRoom, idPlayer, unit.redisId, unit]);
+		const nextRedisId = await Reflect.apply(
+			RedisUnit.getNextRedisId, this,
+			[shortIdRoom, idPlayer]
+		);
+		const redisUnit = {
+			id:      unit.id,
+			redisId: nextRedisId,
+			x:       0,
+			y:       0,
+			life:    unit.life,
+			ammo1:   unit.ammo1,
+			ammo2:   unit.ammo2,
+			fuel:    unit.fuel,
+		};
+
+		await Reflect.apply(RedisUnit.setValues, this, [
+			shortIdRoom, idPlayer, nextRedisId, redisUnit,
+		]);
+		return redisUnit;
+	}
+
+	/**
+	 * Set values of the Redis hm.
+	 * @param {String} shortIdRoom - The shortid of the room.
+	 * @param {Number} idPlayer - The id of the player.
+	 * @param  {Number} redisIdUnit - The id of the unit (in redis DB).
+	 * @param {Object} values - The Object values.
+	 * @return {Promise} The Redis hmset Promise.
+	 */
+	static setValues(shortIdRoom, idPlayer, redisIdUnit, values) {
+		return this.redis.hmset(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit), values);
+	}
+
+	/**
+	 * Unit to parse (cast string to int)
+	 * @param {Object} unit The unit to parse
+	 * @return {Object} The unit parsed
+	 */
+	static parseModel(unit) {
+		unit.id = Number.parseInt(unit.id, 10);
+		unit.x = Number.parseInt(unit.x, 10);
+		unit.y = Number.parseInt(unit.y, 10);
+		unit.life = Number.parseInt(unit.life, 10);
+		unit.ammo1 = Number.parseInt(unit.ammo1, 10);
+		unit.ammo2 = Number.parseInt(unit.ammo2, 10);
+		unit.fuel = Number.parseInt(unit.fuel, 10);
 		return unit;
 	}
 
@@ -88,6 +113,54 @@ class RedisUnit {
 			return null;
 		}
 		return RedisUnit.parseModel(unit);
+	}
+
+	/**
+	 * Return all units from a Room.
+	 * @param  {String} shortIdRoom - The shortid of the room.
+	 * @return {Promise} A Promise with all units.
+	 */
+	static getAllUnitInRoom(shortIdRoom) {
+		return new Promise((resolve, reject) => {
+			const unitKeysWithCmd = [];
+			const stream = this.redis.scanStream({
+				match: RedisUnit.getKey(shortIdRoom),
+			});
+
+			stream.on('data', (keysResult) => {
+				keysResult.forEach((key) => {
+					unitKeysWithCmd.push(['hgetall', key]);
+				});
+			});
+
+			stream.on('end', () => {
+				if (unitKeysWithCmd.length === 0) {
+					resolve([]);
+					return;
+				}
+
+				this.redis.pipeline(unitKeysWithCmd)
+					.exec()
+					.then((result) => {
+						const units = [];
+						const errors = [];
+
+						result.forEach((unit) => {
+							if (unit[0] !== null) {
+								errors.push(unit[0]);
+							} else {
+								units.push(RedisUnit.parseModel(unit[1]));
+							}
+						});
+						if (errors.length) {
+							reject(errors);
+							return;
+						}
+						resolve(units);
+					})
+					.catch((error) => reject(error));
+			});
+		});
 	}
 
 	/**
@@ -111,7 +184,7 @@ class RedisUnit {
 		return new Promise((resolve) => {
 			const ids = [];
 			const stream = this.redis.scanStream({
-				match: `unit:${shortIdRoom}:${idPlayer}:*`,
+				match: RedisUnit.getKey(shortIdRoom, idPlayer),
 			});
 
 			stream.on('data', (keysResult) => {
@@ -164,18 +237,6 @@ class RedisUnit {
 	static exists(shortIdRoom, idPlayer, redisIdUnit) {
 		return this.redis.exists(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit))
             .then((result) => !!result);
-	}
-
-	/**
-	 * Set values of the Redis hm.
-	 * @param {String} shortIdRoom - The shortid of the room.
-	 * @param {Number} idPlayer - The id of the player.
-	 * @param  {Number} redisIdUnit - The id of the unit (in redis DB).
-	 * @param {Object} values - The Object values.
-	 * @return {Promise} The Redis hmset Promise.
-	 */
-	static setValues(shortIdRoom, idPlayer, redisIdUnit, values) {
-		return this.redis.hmset(RedisUnit.getKey(shortIdRoom, idPlayer, redisIdUnit), values);
 	}
 }
 

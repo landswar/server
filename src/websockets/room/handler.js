@@ -1,9 +1,11 @@
 const Boom = require('boom');
 
 let server = null;
+let api = null;
 
 exports.setServerInstance = function (serverInstance) {
 	server = serverInstance;
+	api = serverInstance.select('api');
 };
 
 exports.join = async function (io, socket, data, callback) {
@@ -53,6 +55,7 @@ exports.join = async function (io, socket, data, callback) {
 		const values = await server.methods.joi.validate(data, schema);
 		const decoded = await server.methods.lib.verifyJwt(values.tokenPlayer);
 		const room = await redisMethods.room.get(values.shortIdRoom);
+		room.units = await redisMethods.unit.getAllUnitInRoom(values.shortIdRoom);
 
 		if (!room) {
 			return callback(Boom.notFound('Room not found').output.payload);
@@ -76,6 +79,13 @@ exports.join = async function (io, socket, data, callback) {
 			await redisMethods.room.setValues(values.shortIdRoom, {
 				nbPlayer: room.nbPlayer,
 			});
+
+			const unit = (await api.inject('/units/1')).result;
+			if (!unit) {
+				return callback(Boom.notFound('Unit not found').output.payload);
+			}
+			const newUnit = await redisMethods.unit.create(values.shortIdRoom, decoded.id, unit);
+			room.units.push(newUnit);
 
 			joinAndBroadcast(values.shortIdRoom, decoded.id, decoded.nickname, true);
 

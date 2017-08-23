@@ -69,14 +69,15 @@ exports.move = async function (socket, data, callback) {
 	/**
 	 * Send a broadcast with the unit moved.
 	 * @param {String} shortIdRoom - The short id of the Room.
-	 * @param {Object} player - The player object.
-	 * @param {Object} unit - The unit object.
+	 * @param {Number} redisIdUnit - The unique Unit id in Redis.
+	 * @param {Number} x - The horizontal position of the Unit.
+	 * @param {Number} y - The vertical position of the Unit.
 	 */
-	function broadcastMoveUnit(shortIdRoom, player, unit) {
+	function broadcastMoveUnit(shortIdRoom, redisIdUnit, x, y) {
 		socket.to(shortIdRoom).emit('unit:moved', {
-			idPLayer: player.id,
-			nickname: player.nickname,
-			unit,
+			redisIdUnit,
+			x,
+			y,
 		});
 	}
 
@@ -95,10 +96,10 @@ exports.move = async function (socket, data, callback) {
 			return callback(Boom.badRequest(`Unit can't move to ${values.x},${values.y}`).output.payload);
 		}
 
-		await redisMethods.unit.setValues(redisUnit.shortIdRoom,
-						redisUnit.id, redisUnit.redisId, redisUnit);
+		await redisMethods.unit.setValues(values.shortIdRoom,
+			player.id, values.redisIdUnit, redisUnit);
 
-		broadcastMoveUnit(values.shortIdRoom, player, redisUnit);
+		broadcastMoveUnit(values.shortIdRoom, values.redisIdUnit, values.x, values.y);
 
 		return callback(redisUnit);
 	} catch (error) {
