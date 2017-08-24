@@ -3,9 +3,9 @@ const env = process.env.NODE_ENV || 'development';
 const knex = require('knex')({
 	client:     'mysql',
 	connection: {
-		host:     '127.0.0.1',
-		user:     'landswar',
-		password: 'landswar',
+		host:     process.env.DB_HOST || '127.0.0.1',
+		user:     process.env.DB_USER || 'landswar',
+		password: process.env.DB_PASSWORD || 'landswar',
 		database: env === 'test' ? 'landswar_test' : 'landswar',
 		charset:  'utf8',
 	},
