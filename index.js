@@ -3,6 +3,7 @@ const Glue = require('glue');
 const good = require('good');
 const logger = require('winston-lludol');
 const Promise = require('bluebird');
+const hapiIoredis = require('hapi-ioredis');
 
 const manifest = require('./manifest.json');
 
@@ -59,7 +60,7 @@ Glue.compose(manifest, options).then((server) =>
 			},
 		}),
 		server.register({
-			register: 'hapi-ioredis',
+			register: hapiIoredis,
 			options:  {
 				port:                   process.env.REDIS_PORT || '6379',
 				url:                    process.env.REDIS_HOST || '127.0.0.1',
