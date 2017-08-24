@@ -6,7 +6,7 @@ const knex = require('knex')({
 		host:     process.env.DB_HOST || '127.0.0.1',
 		user:     process.env.DB_USER || 'landswar',
 		password: process.env.DB_PASSWORD || 'landswar',
-		database: env === 'test' ? 'landswar_test' : 'landswar',
+		database: env === 'test' ? 'landswar_test' : (process.env.DB_DATABASE || 'landswar'),
 		charset:  'utf8',
 	},
 	useNullAsDefault: true,
