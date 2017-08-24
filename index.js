@@ -19,7 +19,6 @@ const env = process.env.NODE_ENV || 'development';
 logger.level = env === 'production' ? 'error' : 'debug';
 
 manifest.connections[0].port = Number.parseInt(process.env.PORT, 10) || 3000;
-manifest.connections[1].port = Number.parseInt(process.env.PORT, 10) || 3000;
 
 Glue.compose(manifest, options).then((server) =>
 	Promise.all([
@@ -59,7 +58,7 @@ Glue.compose(manifest, options).then((server) =>
 
 	server.start(() => {
 		logger.info(`API listening at ${server.connections[0].info.uri}`);
-		logger.info(`WebSocket listening at ${server.connections[1].info.uri}`);
+		// logger.info(`WebSocket listening at ${server.connections[1].info.uri}`);
 	});
 }).catch((error) => {
 	logger.error(error);

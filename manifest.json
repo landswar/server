@@ -2,16 +2,12 @@
 	"connections": [
 		{
 			"host": "0.0.0.0",
-			"labels": ["api"],
+			"labels": ["api", "websocket"],
 			"routes": {
 				"files": {
 					"relativeTo": "./public"
 				}
 			}
-		},
-		{
-			"host": "0.0.0.0",
-			"labels": ["websocket"]
 		}
 	],
 	"registrations": [
