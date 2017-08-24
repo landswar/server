@@ -17,19 +17,6 @@
 	"registrations": [
 		{
 			"plugin": {
-				"register": "hapi-ioredis",
-				"options": {
-					"port": "6379",
-					"url": "127.0.0.1",
-					"enableReadyCheck": true,
-					"enableOfflineQueue": false,
-					"showFriendlyErrorStack": true,
-					"db": 0
-				}
-			}
-		},
-		{
-			"plugin": {
 				"register": "hapio",
 				"options": {
 					"connectionLabel": "websocket"

@@ -20,6 +20,22 @@ logger.level = env === 'production' ? 'error' : 'debug';
 manifest.connections[0].port = Number.parseInt(process.env.API_PORT, 10) || 3000;
 manifest.connections[1].port = Number.parseInt(process.env.WEBSOCKET_PORT, 10) || 3001;
 
+/**
+ * 		{
+			"plugin": {
+				"register": "hapi-ioredis",
+				"options": {
+					"port": "6379",
+					"url": "127.0.0.1",
+					"enableReadyCheck": true,
+					"enableOfflineQueue": false,
+					"showFriendlyErrorStack": true,
+					"db": 0
+				}
+			}
+		},
+ */
+
 Glue.compose(manifest, options).then((server) =>
 	Promise.all([
 		server,
@@ -40,6 +56,18 @@ Glue.compose(manifest, options).then((server) =>
 						],
 					}],
 				},
+			},
+		}),
+		server.register({
+			register: 'hapi-ioredis',
+			options:  {
+				port:                   process.env.REDIS_PORT || '6379',
+				url:                    process.env.REDIS_HOST || '127.0.0.1',
+				password:               process.env.REDIS_PASSWORD || '',
+				enableReadyCheck:       true,
+				enableOfflineQueue:     false,
+				showFriendlyErrorStack: true,
+				db:                     0,
 			},
 		}),
 	])
