@@ -62,13 +62,10 @@ Glue.compose(manifest, options).then((server) =>
 		server.register({
 			register: hapiIoredis,
 			options:  {
-				port:                   process.env.REDIS_PORT || '6379',
-				url:                    process.env.REDIS_HOST || '127.0.0.1',
-				password:               process.env.REDIS_PASSWORD || '',
-				enableReadyCheck:       true,
+				url:                    process.env.REDIS_URL || 'redis://127.0.0.1:6379/0',
+				nableReadyCheck:        true,
 				enableOfflineQueue:     false,
 				showFriendlyErrorStack: true,
-				db:                     0,
 			},
 		}),
 	])
