@@ -6,30 +6,16 @@ addons:
   code_climate:
     repo_token: 978c7a4ef5c9e5ad72f410c779482a7299904c91fa5aba6fa693225c7e25cf68
 
-before_install:
-- openssl aes-256-cbc -K $encrypted_263db915efba_key -iv $encrypted_263db915efba_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
-- eval "$(ssh-agent -s)"
-- chmod 600 /tmp/deploy_rsa
-- ssh-add /tmp/deploy_rsa
+after_success:
+- npm install -g codeclimate-test-reporter codecov
+- codeclimate-test-reporter < coverage/lcov.info
+- codecov
 
 deploy:
-  - provider: script
-    skip_cleanup: true
-    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh production'
-    on:
-      branch: master
-  - provider: script
-    skip_cleanup: true
-    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh beta'
-    on:
-      branch: beta
-  - provider: script
-    skip_cleanup: true
-    script: ssh travis@landswar.com -p $SSH_PORT -o "StrictHostKeyChecking no" '~/deploy.sh development'
-    on:
-      branch: dev
-
-after_success:
-  - npm install -g codeclimate-test-reporter codecov
-  - codeclimate-test-reporter < coverage/lcov.info
-  - codecov
+  provider: heroku
+  api_key:
+    secure: uYsZBbN77nwvitidQZanv3Hbxaw3CzRkdveb3Sw/k89395ChkBfRcCVJybcSfFzg+sp2XY9o6G3Z7hg3QD6muut3sWqEBylM0jBfO3JwLZOPLpF0HWbedo8kf7k6TFPk7+v1mbLjxvMmwcdMSd2hP8B1rJ7F/Z3Aawd3Vz9VKDDmkxc2PcO5uEhbxeFHbwCLyCCN0oaJxXGxuy8ibThcxozDocY8aOEMFPQog36fWlNl6CAcQWvM4VIhJ62TwUTMES2k5oxxzORKGlICWT54xPO71FnCxr6z5BClEmmkHYlJVdnHF6x/G6P5zI2bZLo7nJ015Hy89CL/8BZlHV5Zej8bD5i31WBTJJFWDkyRky2k7rd2mr1dd2E4bcVpu1ptadAtVvrj6REAlao3xm0LgOZnOyPNIzG5WIYqzZTA1Bjl0FG+FbIiqqrqHNuvQH2TYCCLfTskKZFMvJBO991Tmi8+lVPBJ/KYO5OHYgO6FAe6JnSADxFbzRU4e1Q7yl7YUISwVdixmCOcJl1uEKsI6BM9ZxBb3lxQ2Bdjg9z1L3KH2ni1a+4XoIg1DoVCjExAxXgNuK1yLV0QMf1K7ajWQWw0MCYXn3ijjUZQU/WN6ucDvRgPvpLMNXbI229ZbCunUV+62wlcQ8KVmKB0l66GwDxTcrBS5FwoXc7ci7f99Uk=
+  app: landswar-server-dev
+  on:
+    repo: landswar/server
+    branch: dev
