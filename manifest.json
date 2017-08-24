@@ -1,7 +1,7 @@
 {
 	"connections": [
 		{
-			"host": "127.0.0.1",
+			"host": "0.0.0.0",
 			"labels": ["api"],
 			"routes": {
 				"files": {
@@ -10,7 +10,7 @@
 			}
 		},
 		{
-			"host": "127.0.0.1",
+			"host": "0.0.0.0",
 			"labels": ["websocket"]
 		}
 	],
